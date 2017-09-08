@@ -10,22 +10,19 @@ namespace DbLogger
 {
     public class ConnectionStrings
     {
-        private static readonly string _encryptKey;
+        private static readonly string EncryptKey;
         static ConnectionStrings()
         {
-            _encryptKey = ConfigurationManager.AppSettings["EncryptKey"];
+            EncryptKey = ConfigurationManager.AppSettings["EncryptKey"];
         }
 
-        static string _logDb;
+        private static string _logDb;
         public static string LogDb
         {
             get
             {
-                if (_logDb == null)
-                {
-                    _logDb = Decrypt(ConfigurationManager.ConnectionStrings["LogDb"].ConnectionString, _encryptKey);
-                }
-                return _logDb;
+                return _logDb ?? (_logDb = Decrypt(ConfigurationManager.ConnectionStrings["LogDb"].ConnectionString,
+                           EncryptKey));
             }
         }
 
@@ -38,16 +35,16 @@ namespace DbLogger
         /// <returns>明文</returns>
         private static string Decrypt(string encrypted, string key)
         {
-            Encoding encoding = Encoding.Default;
-            byte[] encryptedBytes = Convert.FromBase64String(encrypted);
-            byte[] keyBytes = Encoding.Default.GetBytes(key);
+            var encoding = Encoding.Default;
+            var encryptedBytes = Convert.FromBase64String(encrypted);
+            var keyBytes = Encoding.Default.GetBytes(key);
 
-            TripleDESCryptoServiceProvider des = new TripleDESCryptoServiceProvider();
-            MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
+            var des = new TripleDESCryptoServiceProvider();
+            var hashmd5 = new MD5CryptoServiceProvider();
             des.Key = hashmd5.ComputeHash(keyBytes);
             hashmd5 = null;
             des.Mode = CipherMode.ECB;
-            byte[] bytes = des.CreateDecryptor().TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+            var bytes = des.CreateDecryptor().TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
 
             return encoding.GetString(bytes);
         }

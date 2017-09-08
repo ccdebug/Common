@@ -11,7 +11,7 @@ namespace DbLogger
 {
     public class LogMessageWorkHandler : IWorkHandler<LogMessageEvent>
     {
-        private static ILog _logger = LogManager.GetLogger(typeof(LogMessageWorkHandler));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(LogMessageWorkHandler));
 
         private static LogMessageRepository _repository;
 
@@ -27,18 +27,18 @@ namespace DbLogger
                 var result = _repository.Insert(@event.LogMessage);
                 if (result > 0)
                 {
-                    MetricsInfluxDb.Metrics.Mark(MetricKeys.LOGMESSAGE_STORE_SUCCESS);
+                    MetricsInfluxDb.Metrics.Mark(MetricKeys.LogmessageStoreSuccess);
                 }
                 else
                 {
-                    MetricsInfluxDb.Metrics.Mark(MetricKeys.LOGMESSAGE_STORE_ERROR);
+                    MetricsInfluxDb.Metrics.Mark(MetricKeys.LogmessageStoreError);
                 }
             }
             catch (Exception ex)
             {
                 //记录日志，发送到metrics
-                MetricsInfluxDb.Metrics.Mark(MetricKeys.LOGMESSAGE_STORE_ERROR);
-                _logger.Error(ex.ToString());
+                MetricsInfluxDb.Metrics.Mark(MetricKeys.LogmessageStoreError);
+                Logger.Error(ex.ToString());
             }
         }
     }

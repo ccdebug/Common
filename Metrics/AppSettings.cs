@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MetricsInfluxDb
 {
-    class AppSettings
+    public class AppSettings
     {
         #region AppSetting 节点
 
@@ -56,7 +56,7 @@ namespace MetricsInfluxDb
         /// <returns></returns>
         public static string GetAppValue(string name)
         {
-            NameValueCollection config = ConfigurationManager.AppSettings;
+            var config = ConfigurationManager.AppSettings;
             return config[name];
         }
 

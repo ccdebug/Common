@@ -9,11 +9,11 @@ namespace DbLogger
 {
     public class TableUtils
     {
-        private static readonly LogMessageRepository _logMessageRepository;
+        private static readonly LogMessageRepository LogMessageRepository;
 
         static TableUtils()
         {
-            _logMessageRepository = new LogMessageRepository();
+            LogMessageRepository = new LogMessageRepository();
         }
 
         public static string GetTableName(bool isHandleLog)
@@ -34,7 +34,7 @@ namespace DbLogger
 
             if (string.IsNullOrEmpty(cacheValue))
             {
-                DateTime logDbServerTime = _logMessageRepository.GetDbServerTime();
+                DateTime logDbServerTime = LogMessageRepository.GetDbServerTime();
                 int leftTime = 60;
                 cacheValue = logDbServerTime.ToString("_yyyyMM");
 
