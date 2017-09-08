@@ -1,0 +1,1722 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Metrics.InfluxDB</name>
+    </assembly>
+    <members>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbConverter">
+            <summary>
+            This class converts Metrics.NET metric values into <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> objects.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.InfluxdbConverter.Timestamp">
+            <summary>
+            Gets or sets the current timestamp. This value is used when creating new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.InfluxdbConverter.GlobalTags">
+            <summary>
+            Gets or sets the global tags. Global tags are added to all created <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbConverter.#ctor">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbConverter"/> using the default precision defined by <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Default.Precision"/>.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbConverter.#ctor(System.Nullable{Metrics.MetricTags})">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbConverter"/> using the specified precision and tags.
+            </summary>
+            <param name="globalTags">The global tags that are added to all created <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbConverter.GetRecords(System.String,Metrics.MetricTags,Metrics.Unit,System.Double)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instance for the gauge value.
+            </summary>
+            <param name="name">The measurement name.</param>
+            <param name="tags">Any additional tags to add to the <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>, these tags overwrite any global tags with the same name.</param>
+            <param name="unit">The metric unit.</param>
+            <param name="value">The metric value object.</param>
+            <returns>A list of <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances for the specified metric value.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbConverter.GetRecords(System.String,Metrics.MetricTags,Metrics.Unit,Metrics.MetricData.CounterValue)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instance for the counter value and any set items.
+            </summary>
+            <param name="name">The measurement name.</param>
+            <param name="tags">Any additional tags to add to the <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>, these tags overwrite any global tags with the same name.</param>
+            <param name="unit">The metric unit.</param>
+            <param name="value">The metric value object.</param>
+            <returns>A list of <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances for the specified metric value.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbConverter.GetRecords(System.String,Metrics.MetricTags,Metrics.Unit,Metrics.MetricData.MeterValue)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instance for the histogram value.
+            </summary>
+            <param name="name">The measurement name.</param>
+            <param name="tags">Any additional tags to add to the <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>, these tags overwrite any global tags with the same name.</param>
+            <param name="unit">The metric unit.</param>
+            <param name="value">The metric value object.</param>
+            <returns>A list of <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances for the specified metric value.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbConverter.GetRecords(System.String,Metrics.MetricTags,Metrics.Unit,Metrics.MetricData.HistogramValue)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instance for the histogram value.
+            </summary>
+            <param name="name">The measurement name.</param>
+            <param name="tags">Any additional tags to add to the <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>, these tags overwrite any global tags with the same name.</param>
+            <param name="unit">The metric unit.</param>
+            <param name="value">The metric value object.</param>
+            <returns>A list of <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances for the specified metric value.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbConverter.GetRecords(System.String,Metrics.MetricTags,Metrics.Unit,Metrics.MetricData.TimerValue)">
+            <summary>
+            Creates new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances for the timer values and any items in the meter item sets.
+            </summary>
+            <param name="name">The measurement name.</param>
+            <param name="tags">Any additional tags to add to the <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>, these tags overwrite any global tags with the same name.</param>
+            <param name="unit">The metric unit.</param>
+            <param name="value">The metric value object.</param>
+            <returns>A list of <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances for the specified metric value.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbConverter.GetRecords(Metrics.HealthStatus)">
+            <summary>
+            Creates new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances for each HealthCheck result in the specified <paramref name="status"/>.
+            </summary>
+            <param name="status">The health status.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbConverter.GetRecord(System.String,Metrics.MetricTags,System.Collections.Generic.IEnumerable{Metrics.InfluxDB.Model.InfluxField})">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> from the specified name, tags, and fields.
+            This uses the timestamp defined on this metrics converter instance.
+            </summary>
+            <param name="name">The measurement or series name. This value is required and cannot be null or empty.</param>
+            <param name="tags">The optional tags to associate with this record.</param>
+            <param name="fields">The <see cref="T:Metrics.InfluxDB.Model.InfluxField"/> values for the output fields.</param>
+            <returns>A new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> from the specified name, tags, and fields.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbConverter.GetRecord(System.String,System.String,Metrics.MetricTags,System.Collections.Generic.IEnumerable{Metrics.InfluxDB.Model.InfluxField})">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> from the specified name, item name, tags, and fields.
+            This uses the timestamp defined on this metrics converter instance.
+            </summary>
+            <param name="name">The measurement or series name. This value is required and cannot be null or empty.</param>
+            <param name="itemName">The set item name. Can contain comma-separated key/value pairs.</param>
+            <param name="tags">The optional tags to associate with this record.</param>
+            <param name="fields">The <see cref="T:Metrics.InfluxDB.Model.InfluxField"/> values for the output fields.</param>
+            <returns>A new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> from the specified name, tags, and fields.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.DefaultConverter">
+            <summary>
+            The default <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbConverter"/> implementation which is simply a concrete type that derives from
+            the abstract base class and provides no additional implementation on top of the base class implementation.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.DefaultConverter.#ctor(System.Nullable{Metrics.MetricTags})">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.DefaultConverter"/> using the specified tags.
+            </summary>
+            <param name="globalTags">The global tags that are added to all created <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances.</param>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter">
+            <summary>
+            This class provides functions to format the context name and metric
+            name into a string used to identify the table to insert records into.
+            The formatter is also used to format the <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>
+            before writing it to the database. This also optionally formats the column
+            names by converting the case and replacing spaces with another character.
+            </summary>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter.ContextFormatterDelegate">
+            <summary>
+            The delegate used for formatting context names.
+            </summary>
+            <param name="contextStack">The context stack.</param>
+            <param name="contextName">The current context name.</param>
+            <returns>The formatted context name.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter.MetricFormatterDelegate">
+            <summary>
+            The delegate used for formatting metric names.
+            </summary>
+            <param name="context">The context name.</param>
+            <param name="name">The metric name.</param>
+            <param name="unit">The metric units.</param>
+            <param name="tags">The metric tags.</param>
+            <returns>The formatted metric name.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter.TagKeyFormatterDelegate">
+            <summary>
+            The delegate used for formatting tag key names.
+            </summary>
+            <param name="tagKey">The tag key name.</param>
+            <returns>The formatted tag key name.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter.FieldKeyFormatterDelegate">
+            <summary>
+            The delegate used for formatting field key names.
+            </summary>
+            <param name="fieldKey">The field key name.</param>
+            <returns>The formatted field key name.</returns>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.ContextNameFormatter">
+            <summary>
+            Formats the context stack and context name into a custom context name string.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.MetricNameFormatter">
+            <summary>
+            Formats the context name and metric into a string used as the table to insert records into.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.TagKeyFormatter">
+            <summary>
+            Formats a tag key into a string used as the column name in the InfluxDB table.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.FieldKeyFormatter">
+            <summary>
+            Formats a field key into a string used as the column name in the InfluxDB table.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.ReplaceSpaceChar">
+            <summary>
+            If not null, will replace all space characters in context names, metric names,
+            tag keys, and field keys with the specified string. The default value is an underscore.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.LowercaseNames">
+            <summary>
+            If set to true will convert all context names, metric names, tag keys, and field keys 
+            to lowercase. If false, it does not modify the names. The default value is true.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbFormatter.#ctor">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> with default values.
+            The default formatters convert identifiers to lowercase, replace spaces with underscores, and if applicable, join multiple identifiers with periods.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbFormatter.#ctor(System.Boolean,System.String)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> with default values, including the <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.LowercaseNames"/> and <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.ReplaceSpaceChar"/> properties.
+            The default formatters convert identifiers to lowercase, replace spaces with underscores, and if applicable, join multiple identifiers with periods.
+            </summary>
+            <param name="lowercase">If true, converts the string to lowercase.</param>
+            <param name="replaceChars">The character(s) to replace all space characters with (underscore by default). If null, spaces are not replaced.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbFormatter.FormatContextName(System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Formats the context name using the <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.ContextNameFormatter"/> if it is set, otherwise returns null.
+            This will apply lowercasing and replace space characters if it is configured on this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.
+            </summary>
+            <param name="contextStack">The list of parent context names.</param>
+            <param name="contextName">The current context name.</param>
+            <returns>The context name after applying the formatters and transformations, or null if the <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.ContextNameFormatter"/> is not set.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbFormatter.FormatMetricName(System.String,System.String,Metrics.Unit,System.String[])">
+            <summary>
+            Formats the metric name using the <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.MetricNameFormatter"/> if it is set, otherwise returns null.
+            This will apply lowercasing and replace space characters if it is configured on this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.
+            </summary>
+            <param name="context">The metrics context name.</param>
+            <param name="name">The metric name.</param>
+            <param name="unit">The metric units.</param>
+            <param name="tags">The metric tags.</param>
+            <returns>The metric name after applying the formatters and transformations, or null if the <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.MetricNameFormatter"/> is not set.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbFormatter.FormatTagKey(System.String)">
+            <summary>
+            Formats the tag key name using the <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.TagKeyFormatter"/> if it is set, otherwise uses the unmodified key value.
+            This will apply lowercasing and replace space characters if it is configured on this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.
+            </summary>
+            <param name="tagKey">The <see cref="P:Metrics.InfluxDB.Model.InfluxTag.Key"/> string value to format.</param>
+            <returns>The tag key name after applying the formatters and transformations.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbFormatter.FormatFieldKey(System.String)">
+            <summary>
+            Formats the field key name using the <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.FieldKeyFormatter"/> if it is set, otherwise uses the unmodified key value.
+            This will apply lowercasing and replace space characters if it is configured on this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.
+            </summary>
+            <param name="fieldKey">The <see cref="P:Metrics.InfluxDB.Model.InfluxField.Key"/> string value to format.</param>
+            <returns>The field key name after applying the formatters and transformations.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbFormatter.FormatRecord(Metrics.InfluxDB.Model.InfluxRecord)">
+            <summary>
+            Formats the measurement name, tag keys, and field keys on the specified <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>
+            with the defined tag and key formatters and returns the same record instance.
+            </summary>
+            <param name="record">The <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> to format the tag and field keys for.</param>
+            <returns>The same <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instance with the tag and field keys formatted.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.DefaultFormatter">
+            <summary>
+            The default formatter used for formatting records. Has some modifications over the default <see cref="T:Metrics.Reporters.BaseReport"/>
+            implementation to generate cleaner output that more closely follows the InfluxDB naming conventions.
+            </summary>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.DefaultFormatter.Default">
+            <summary>
+            Default InfluxDB formatters and settings.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.DefaultFormatter.Default.ContextNameFormatter">
+            <summary>
+            The default context name formatter which formats the context stack and context name into a custom context name string.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.DefaultFormatter.Default.MetricNameFormatter">
+            <summary>
+            The default metric name formatter which formats the context name and metric into a string used as the table to insert records into.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.DefaultFormatter.Default.TagKeyFormatter">
+            <summary>
+            The default tag key formatter which formats a tag key into a string used as the column name in the InfluxDB table.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.DefaultFormatter.Default.FieldKeyFormatter">
+            <summary>
+            The default field key formatter which formats a field key into a string used as the column name in the InfluxDB table.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.DefaultFormatter.Default.ReplaceSpaceChar">
+            <summary>
+            The default character used to replace space characters in identifier names. This value is an underscore.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.DefaultFormatter.Default.LowercaseNames">
+            <summary>
+            The default value for whether to convert identifier names to lowercase. This value is true.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.DefaultFormatter.#ctor">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> with default values.
+            The default formatters convert identifiers to lowercase, replace spaces with underscores, and if applicable, joins multiple identifiers with periods.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.DefaultFormatter.#ctor(System.Boolean,System.String)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> with default values, including the <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.LowercaseNames"/> and <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.ReplaceSpaceChar"/> properties.
+            The default formatters convert identifiers to lowercase, replace spaces with underscores, and if applicable, joins multiple identifiers with periods.
+            </summary>
+            <param name="lowercase">If true, converts the string to lowercase.</param>
+            <param name="replaceChars">The character(s) to replace all space characters with (underscore by default). If null, spaces are not replaced.</param>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbHttpWriter">
+            <summary>
+            This class writes <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>s formatted in the LineProtocol to the InfluxDB server using HTTP POST.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbHttpWriter.#ctor(System.Uri)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbHttpWriter"/> with the specified URI.
+            </summary>
+            <param name="influxDbUri">The HTTP URI of the InfluxDB server.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbHttpWriter.#ctor(Metrics.InfluxDB.Model.InfluxConfig,System.Int32)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbHttpWriter"/> with the specified configuration and batch size.
+            </summary>
+            <param name="config">The InfluxDB configuration.</param>
+            <param name="batchSize">The maximum number of records to write per flush. Set to zero to write all records in a single flush. Negative numbers are not allowed.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbHttpWriter.FormatInfluxUri(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Creates an HTTP URI for InfluxDB using the values specified in the <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> object.
+            </summary>
+            <param name="config">The configuration object to get the relevant fields to build the HTTP URI from.</param>
+            <returns>A new InfluxDB URI using the configuration specified in the <paramref name="config"/> parameter.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbHttpWriter.WriteToTransport(System.Byte[])">
+            <summary>
+            Writes the byte array to the InfluxDB server in a single HTTP POST operation.
+            </summary>
+            <param name="bytes">The bytes to write to the InfluxDB server.</param>
+            <returns>The HTTP response from the server after writing the message.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbJsonWriter">
+            <summary>
+            This class writes <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>s formatted as a JSON object to the InfluxDB server using HTTP POST.
+            NOTE: This protocol is only supported in InfluxDB version v0.9.1 and earlier.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbJsonWriter.#ctor(System.Uri)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbHttpWriter"/> with the specified URI.
+            NOTE: This protocol is only supported in InfluxDB version v0.9.1 and earlier.
+            </summary>
+            <param name="influxDbUri">The HTTP URI of the InfluxDB server.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbJsonWriter.#ctor(Metrics.InfluxDB.Model.InfluxConfig,System.Int32)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbHttpWriter"/> with the specified URI.
+            NOTE: This protocol is only supported in InfluxDB version v0.9.1 and earlier.
+            </summary>
+            <param name="config">The InfluxDB configuration.</param>
+            <param name="batchSize">The maximum number of records to write per flush. Set to zero to write all records in a single flush. Negative numbers are not allowed.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbJsonWriter.FormatInfluxUri(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Creates an HTTP JSON URI for InfluxDB using the values specified in the <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> object.
+            </summary>
+            <param name="config">The configuration object to get the relevant fields to build the HTTP URI from.</param>
+            <returns>A new InfluxDB JSON URI using the configuration specified in the <paramref name="config"/> parameter.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbJsonWriter.GetBatchBytes(Metrics.InfluxDB.Model.InfluxBatch)">
+            <summary>
+            Gets the byte representation of the <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/> in JSON syntax using UTF8 encoding.
+            </summary>
+            <param name="batch">The batch to get the bytes for.</param>
+            <returns>The byte representation of the batch.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbJsonWriter.WriteToTransport(System.Byte[])">
+            <summary>
+            Writes the byte array to the InfluxDB server in a single HTTP POST operation.
+            </summary>
+            <param name="bytes">The bytes to write to the InfluxDB server.</param>
+            <returns>The HTTP response from the server after writing the message.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbJsonWriter.FormatValue(System.Object)">
+            <summary>
+            Formats the field value in the appropriate line protocol format based on the type of the value object.
+            The value type must be a string, boolean, or integral or floating-point type.
+            </summary>
+            <param name="value">The field value to format.</param>
+            <returns>The field value formatted as a string used in the line protocol format.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbUdpWriter">
+            <summary>
+            This class writes <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>s formatted in the LineProtocol to the InfluxDB server using the UDP transport.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbUdpWriter.#ctor(System.Uri)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbUdpWriter"/> with the specified URI.
+            </summary>
+            <param name="influxDbUri">The UDP URI of the InfluxDB server. Should be in the format: net.udp//{host}:{port}/</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbUdpWriter.#ctor(Metrics.InfluxDB.Model.InfluxConfig,System.Int32)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbUdpWriter"/> with the specified configuration and batch size.
+            </summary>
+            <param name="config">The InfluxDB configuration.</param>
+            <param name="batchSize">The maximum number of records to write per flush. Set to zero to write all records in a single flush. Negative numbers are not allowed.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbUdpWriter.GetBatchBytes(Metrics.InfluxDB.Model.InfluxBatch)">
+            <summary>
+            Gets the byte representation of the <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/> in LineProtocol syntax using UTF8 encoding.
+            </summary>
+            <param name="batch">The batch to get the bytes for.</param>
+            <returns>The byte representation of the batch.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbUdpWriter.WriteToTransport(System.Byte[])">
+            <summary>
+            Writes the byte array to the InfluxDB server in a single UDP send operation.
+            </summary>
+            <param name="bytes">The bytes to write to the InfluxDB server.</param>
+            <returns>The HTTP response from the server after writing the message.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbWriter">
+            <summary>
+            The <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbWriter"/> is responsible for writing <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>s to the InfluxDB server.
+            Derived classes can implement various methods and protocols for writing the data (ie. HTTP API, UDP, etc).
+            </summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Adapters.InfluxdbWriter.formatSize">
+            <summary>This function formats bytes into a string with units either in bytes or KiB.</summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.InfluxdbWriter.Batch">
+            <summary>
+            The currently buffered <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/> that has not yet been flushed to the underlying writer.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Adapters.InfluxdbWriter.BatchSize">
+            <summary>
+            The maximum number of records to write per flush. Set to zero to write all records in a single flush. Negative numbers are not allowed.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbWriter.#ctor">
+            <summary>
+            Creates a new instance of a <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbWriter"/>.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbWriter.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of a <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbWriter"/>.
+            </summary>
+            <param name="batchSize">The maximum number of records to write per flush. Set to zero to write all records in a single flush. Negative numbers are not allowed.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbWriter.GetBatchBytes(Metrics.InfluxDB.Model.InfluxBatch)">
+            <summary>
+            Gets the byte representation of the <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/>. This will convert the
+            batch to the correct string syntax and then get the byte array for it in UTF8 encoding.
+            </summary>
+            <param name="batch">The batch to get the bytes for.</param>
+            <returns>The byte representation of the batch.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbWriter.WriteToTransport(System.Byte[])">
+            <summary>
+            Writes the byte array to the InfluxDB server using the underlying transport.
+            </summary>
+            <param name="bytes">The bytes to write to the InfluxDB server.</param>
+            <returns>The response from the server after writing the message, or null if there is no response (like for UDP).</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbWriter.Flush">
+            <summary>
+            Flushes all buffered records in the batch by writing them to the server in a single write operation.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbWriter.Write(Metrics.InfluxDB.Model.InfluxRecord)">
+            <summary>
+            Writes the record to the InfluxDB server. If batching is used, the record will be added to the
+            batch buffer but will not immediately be written to the server. If the number of buffered records
+            is greater than or equal to the BatchSize, then the batch will be flushed to the underlying writer.
+            </summary>
+            <param name="record">The record to write.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbWriter.Write(System.Collections.Generic.IEnumerable{Metrics.InfluxDB.Model.InfluxRecord})">
+            <summary>
+            Writes the records to the InfluxDB server. Flushing will occur in increments of the defined BatchSize.
+            </summary>
+            <param name="records">The records to write.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbWriter.Dispose">
+            <summary>
+            Flushes all buffered records and clears the batch.
+            </summary>
+        </member>
+        <member name="T:Metrics.InfluxDB.Adapters.InfluxdbLineWriter">
+            <summary>
+            This class writes <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>s formatted in the LineProtocol to the InfluxDB server.
+            </summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Adapters.InfluxdbLineWriter.config">
+            <summary>
+            The InfluxDB configuration.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbLineWriter.#ctor(Metrics.InfluxDB.Model.InfluxConfig,System.Int32)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbLineWriter"/> with the specified configuration and batch size.
+            </summary>
+            <param name="config">The InfluxDB configuration.</param>
+            <param name="batchSize">The maximum number of records to write per flush. Set to zero to write all records in a single flush. Negative numbers are not allowed.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Adapters.InfluxdbLineWriter.GetBatchBytes(Metrics.InfluxDB.Model.InfluxBatch)">
+            <summary>
+            Gets the byte representation of the <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/> in LineProtocol syntax using UTF8 encoding.
+            </summary>
+            <param name="batch">The batch to get the bytes for.</param>
+            <returns>The byte representation of the batch.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.InfluxdbBaseReport">
+            <summary>
+            A metrics report that sends data to an InfluxDB server.
+            This sends the data using the InfluxDB LineProtocol syntax over HTTP.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.InfluxdbBaseReport.Config">
+            <summary>
+            The <see cref="T:Metrics.InfluxDB.InfluxdbHttpReport"/> configuration settings.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.InfluxdbBaseReport.Converter">
+            <summary>
+            Gets the <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbConverter"/> used by this <see cref="T:Metrics.InfluxDB.InfluxdbBaseReport"/>
+            instance to convert Metrics.NET metrics into <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>s.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.InfluxdbBaseReport.Formatter">
+            <summary>
+            Gets the <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> used by this <see cref="T:Metrics.InfluxDB.InfluxdbBaseReport"/>
+            instance to format identifier names.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.InfluxdbBaseReport.Writer">
+            <summary>
+            Gets the <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbWriter"/> used by this <see cref="T:Metrics.InfluxDB.InfluxdbBaseReport"/>
+            instance to write <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>s to the InfluxDB server.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.InfluxdbBaseReport.Default">
+            <summary>
+            Gets a new <see cref="T:Metrics.InfluxDB.InfluxdbBaseReport"/> instance with the default values.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.#ctor(System.Uri)">
+            <summary>
+            Creates a new InfluxDB report that uses the LineProtocol syntax over the protocol specified by the URI schema.
+            </summary>
+            <param name="influxDbUri">The URI of the InfluxDB server, including any query string parameters.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.#ctor(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Creates a new InfluxDB report that uses the Line Protocol syntax.
+            </summary>
+            <param name="config">The InfluxDB configuration object.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.GetDefaultConfig(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Returns an instance with the default configuration for the derived type's implementation.
+            If <paramref name="defaultConfig"/> is specified, the default converter, formatter, and
+            writer are applied to it if any are not set; otherwise creates and returns a new instance.
+            </summary>
+            <param name="defaultConfig">The configuration instance to apply the default converter, formatter, and writer to.</param>
+            <returns>A default <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance for the derived type's implementation.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.ValidateConfig(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Validates the configuration to ensure the configuration is valid and throws an exception on invalid settings.
+            </summary>
+            <param name="config">The configuration to validate.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.StartReport(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.StartContext(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.EndReport(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.FormatContextName(System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.FormatMetricName``1(System.String,Metrics.MetricData.MetricValueSource{``0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.ReportGauge(System.String,System.Double,Metrics.Unit,Metrics.MetricTags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.ReportCounter(System.String,Metrics.MetricData.CounterValue,Metrics.Unit,Metrics.MetricTags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.ReportMeter(System.String,Metrics.MetricData.MeterValue,Metrics.Unit,Metrics.TimeUnit,Metrics.MetricTags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.ReportHistogram(System.String,Metrics.MetricData.HistogramValue,Metrics.Unit,Metrics.MetricTags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.ReportTimer(System.String,Metrics.MetricData.TimerValue,Metrics.Unit,Metrics.TimeUnit,Metrics.TimeUnit,Metrics.MetricTags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbBaseReport.ReportHealth(Metrics.HealthStatus)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Metrics.InfluxDB.DefaultInfluxdbReport">
+            <summary>
+            The default implementation of the <see cref="T:Metrics.InfluxDB.InfluxdbBaseReport"/> using default settings.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.DefaultInfluxdbReport.#ctor(System.Uri)">
+            <summary>
+            Creates a new InfluxDB report that uses the Line Protocol syntax over HTTP.
+            </summary>
+            <param name="influxDbUri">The URI of the InfluxDB server, including any query string parameters.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.DefaultInfluxdbReport.#ctor(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Creates a new InfluxDB report that uses the Line Protocol syntax over HTTP.
+            </summary>
+            <param name="config">The InfluxDB configuration object.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.DefaultInfluxdbReport.GetDefaultConfig(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Gets the default configuration by setting the <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Converter"/> and <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Formatter"/>
+            properties to <see cref="T:Metrics.InfluxDB.Adapters.DefaultConverter"/> and <see cref="T:Metrics.InfluxDB.Adapters.DefaultFormatter"/> if either is not set.
+            </summary>
+            <param name="defaultConfig">The configuration to apply the settings to. If null, creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance.</param>
+            <returns>A default <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance for the derived type's implementation.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.InfluxdbConfigExtensions">
+            <summary>
+            Configuration extension methods for InfluxDB.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbHttp(Metrics.Reports.MetricsReports,System.Uri,System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbHttpReport"/> to be executed at a fixed interval.
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="influxDbUri">The URI of the InfluxDB server, including any query string parameters. The expected format is: http[s]://{host}:{port}/write?db={database}&amp;u={username}&amp;p={password}&amp;precision={n,u,ms,s,m,h}&amp;rp={retentionPolicy}</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbHttp(Metrics.Reports.MetricsReports,System.String,System.String,System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbHttpReport"/> to be executed at a fixed interval.
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="database">The database name to write values to.</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbHttp(Metrics.Reports.MetricsReports,System.String,System.Nullable{System.UInt16},System.String,System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbHttpReport"/> to be executed at a fixed interval.
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="port">The port number to connect to on the InfluxDB server, or null to use the default port number.</param>
+            <param name="database">The database name to write values to.</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbHttp(Metrics.Reports.MetricsReports,System.String,System.String,System.String,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision},System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbHttpReport"/> to be executed at a fixed interval.
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="database">The database name to write values to.</param>
+            <param name="retentionPolicy">The retention policy to use when writing datapoints to the InfluxDB database, or null to use the database's default retention policy.</param>
+            <param name="precision">The precision of the timestamp value in the line protocol syntax.</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbHttp(Metrics.Reports.MetricsReports,System.String,System.Nullable{System.UInt16},System.String,System.String,System.String,System.String,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision},System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbHttpReport"/> to be executed at a fixed interval.
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="port">The port number to connect to on the InfluxDB server, or null to use the default port number.</param>
+            <param name="database">The database name to write values to.</param>
+            <param name="username">The username to use to connect to the InfluxDB server, or null if authentication is not used.</param>
+            <param name="password">The password to use to connect to the InfluxDB server, or null if authentication is not used.</param>
+            <param name="retentionPolicy">The retention policy to use when writing datapoints to the InfluxDB database, or null to use the database's default retention policy.</param>
+            <param name="precision">The precision of the timestamp value in the line protocol syntax.</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbHttp(Metrics.Reports.MetricsReports,Metrics.InfluxDB.Model.InfluxConfig,System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbHttpReport"/> to be executed at a fixed interval.
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="config">The InfluxDB reporter configuration.</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbUdp(Metrics.Reports.MetricsReports,System.Uri,System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbUdpReport"/> to be executed at a fixed interval.
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="influxDbUri">The URI of the InfluxDB server. The expected format is: net.udp://{host}:{port}/</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbUdp(Metrics.Reports.MetricsReports,System.String,System.UInt16,System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbUdpReport"/> to be executed at a fixed interval.
+            This reporter writes metric values to the InfluxDB database using the UDP transport.
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="port">The port number to connect to on the InfluxDB server, this is required for UDP connections.</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbUdp(Metrics.Reports.MetricsReports,Metrics.InfluxDB.Model.InfluxConfig,System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbUdpReport"/> to be executed at a fixed interval.
+            This reporter writes metric values to the InfluxDB database using the UDP transport.
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="config">The InfluxDB reporter configuration.</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbJson(Metrics.Reports.MetricsReports,System.String,System.Nullable{System.UInt16},System.String,System.String,System.String,System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbJsonReport"/> to be executed at a fixed interval using the deprecated JSON protocol.
+            NOTE: It is recommended to NOT use the JSON reporter because of performance issues, and support for JSON has been
+            removed from InfluxDB in versions later than v0.9.1. It is recommended to use the HTTP or UDP reporters instead.
+            See for more information: https://docs.influxdata.com/influxdb/v0.13/write_protocols/json/
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="port">The port number to connect to on the InfluxDB server, or null to use the default port number.</param>
+            <param name="database">The database name to write values to.</param>
+            <param name="username">The username to use to connect to the InfluxDB server, or null if authentication is not used.</param>
+            <param name="password">The password to use to connect to the InfluxDB server, or null if authentication is not used.</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDbJson(Metrics.Reports.MetricsReports,Metrics.InfluxDB.Model.InfluxConfig,System.TimeSpan,Metrics.MetricData.MetricsFilter,System.Action{Metrics.InfluxDB.Model.InfluxConfig})">
+            <summary>
+            Schedules an <see cref="T:Metrics.InfluxDB.InfluxdbJsonReport"/> to be executed at a fixed interval using the deprecated JSON protocol.
+            NOTE: It is recommended to NOT use the JSON reporter because of performance issues, and support for JSON has been
+            removed from InfluxDB in versions later than v0.9.1. It is recommended to use the HTTP or UDP reporters instead.
+            See for more information: https://docs.influxdata.com/influxdb/v0.13/write_protocols/json/
+            </summary>
+            <param name="reports">The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</param>
+            <param name="config">The InfluxDB reporter configuration.</param>
+            <param name="interval">Interval at which to run the report.</param>
+            <param name="filter">Only report metrics that match the filter.</param> 
+            <param name="configFunc">A lambda expression that allows further configuration of the InfluxDB reporter using fluent syntax.</param>
+            <returns>The <see cref="T:Metrics.Reports.MetricsReports"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithCredentials(Metrics.InfluxDB.Model.InfluxConfig,System.String,System.String)">
+            <summary>
+            Sets the Writer on the InfluxDB reporter configuration and returns the same instance.
+            </summary>
+            <param name="config">The InfluxDB reporter configuration.</param>
+            <param name="username">The username.</param>
+            <param name="password">The username.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithWriter(Metrics.InfluxDB.Model.InfluxConfig,Metrics.InfluxDB.Adapters.InfluxdbWriter,System.Action{Metrics.InfluxDB.Adapters.InfluxdbWriter})">
+            <summary>
+            Sets the Writer on the InfluxDB reporter configuration and returns the same instance.
+            </summary>
+            <param name="config">The InfluxDB reporter configuration.</param>
+            <param name="writer">The InfluxDB metric writer.</param>
+            <param name="configFunc">A lambda expression that allows further configuration of the <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbWriter"/> using fluent syntax.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithConverter(Metrics.InfluxDB.Model.InfluxConfig,System.Action{Metrics.InfluxDB.Adapters.InfluxdbConverter})">
+            <summary>
+            Creates a <see cref="T:Metrics.InfluxDB.Adapters.DefaultConverter"/> and passes it to the configuration lambda expression, then sets the converter on the InfluxDB configuration and returns the same instance.
+            </summary>
+            <param name="config">The InfluxDB reporter configuration.</param>
+            <param name="configFunc">A lambda expression that allows further configuration of the <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbConverter"/> using fluent syntax.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithConverter(Metrics.InfluxDB.Model.InfluxConfig,Metrics.InfluxDB.Adapters.InfluxdbConverter,System.Action{Metrics.InfluxDB.Adapters.InfluxdbConverter})">
+            <summary>
+            Sets the Converter on the InfluxDB reporter configuration and returns the same instance.
+            </summary>
+            <param name="config">The InfluxDB reporter configuration.</param>
+            <param name="converter">The InfluxDB metric converter.</param>
+            <param name="configFunc">A lambda expression that allows further configuration of the <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbConverter"/> using fluent syntax.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithFormatter(Metrics.InfluxDB.Model.InfluxConfig,System.Action{Metrics.InfluxDB.Adapters.InfluxdbFormatter})">
+            <summary>
+            Creates a <see cref="T:Metrics.InfluxDB.Adapters.DefaultFormatter"/> and passes it to the configuration lambda expression, then sets the formatter on the InfluxDB configuration and returns the same instance.
+            </summary>
+            <param name="config">The InfluxDB reporter configuration.</param>
+            <param name="configFunc">A lambda expression that allows further configuration of the <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> using fluent syntax.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithFormatter(Metrics.InfluxDB.Model.InfluxConfig,Metrics.InfluxDB.Adapters.InfluxdbFormatter,System.Action{Metrics.InfluxDB.Adapters.InfluxdbFormatter})">
+            <summary>
+            Sets the Formatter on the InfluxDB reporter configuration and returns the same instance.
+            </summary>
+            <param name="config">The InfluxDB reporter configuration.</param>
+            <param name="formatter">The InfluxDB metric formatter.</param>
+            <param name="configFunc">A lambda expression that allows further configuration of the <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> using fluent syntax.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithGlobalTags(Metrics.InfluxDB.Adapters.InfluxdbConverter,Metrics.MetricTags)">
+            <summary>
+            Sets the GlobalTags on this instance to the specified value and returns this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbConverter"/> instance.
+            </summary>
+            <param name="converter">The InfluxDB metric converter.</param>
+            <param name="globalTags">The global tags that are added to all created <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> instances.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbConverter"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithContextFormatter(Metrics.InfluxDB.Adapters.InfluxdbFormatter,Metrics.InfluxDB.Adapters.InfluxdbFormatter.ContextFormatterDelegate)">
+            <summary>
+            Sets the ContextNameFormatter on this instance to the specified value and returns this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.
+            </summary>
+            <param name="formatter">The InfluxDB metric formatter.</param>
+            <param name="contextFormatter">The context name formatter function.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithMetricFormatter(Metrics.InfluxDB.Adapters.InfluxdbFormatter,Metrics.InfluxDB.Adapters.InfluxdbFormatter.MetricFormatterDelegate)">
+            <summary>
+            Sets the MetricNameFormatter on this instance to the specified value and returns this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.
+            </summary>
+            <param name="formatter">The InfluxDB metric formatter.</param>
+            <param name="metricFormatter">The metric name formatter function.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithTagFormatter(Metrics.InfluxDB.Adapters.InfluxdbFormatter,Metrics.InfluxDB.Adapters.InfluxdbFormatter.TagKeyFormatterDelegate)">
+            <summary>
+            Sets the TagKeyFormatter on this instance to the specified value and returns this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.
+            </summary>
+            <param name="formatter">The InfluxDB metric formatter.</param>
+            <param name="tagFormatter">The tag key formatter function.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithFieldFormatter(Metrics.InfluxDB.Adapters.InfluxdbFormatter,Metrics.InfluxDB.Adapters.InfluxdbFormatter.FieldKeyFormatterDelegate)">
+            <summary>
+            Sets the FieldKeyFormatter on this instance to the specified value and returns this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.
+            </summary>
+            <param name="formatter">The InfluxDB metric formatter.</param>
+            <param name="fieldFormatter">The field key formatter function.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithLowercase(Metrics.InfluxDB.Adapters.InfluxdbFormatter,System.Boolean)">
+            <summary>
+            Sets the <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.LowercaseNames"/> property on this instance to the specified value and returns this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.
+            </summary>
+            <param name="formatter">The InfluxDB metric formatter.</param>
+            <param name="lowercaseNames">If set to true will convert all context names, metric names, tag keys, and field keys to lowercase. If false, it does not modify the names. The default value is true.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithReplaceSpaces(Metrics.InfluxDB.Adapters.InfluxdbFormatter,System.String)">
+            <summary>
+            Sets the <see cref="P:Metrics.InfluxDB.Adapters.InfluxdbFormatter.ReplaceSpaceChar"/> property on this instance to the specified value and returns this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.
+            </summary>
+            <param name="formatter">The InfluxDB metric formatter.</param>
+            <param name="replaceChars">The character(s) to replace all space characters with (underscore by default). If <see cref="F:System.String.Empty"/>, removes all spaces. If null, spaces are not replaced.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> instance.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithBatchSize(Metrics.InfluxDB.Adapters.InfluxdbWriter,System.Int32)">
+            <summary>
+            Sets the BatchSize on this instance to the specified value and returns this <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbWriter"/> instance.
+            </summary>
+            <param name="writer">The InfluxDB metric writer.</param>
+            <param name="batchSize">The maximum number of records to write per flush. Set to zero to write all records in a single flush. Negative numbers are not allowed.</param>
+            <returns>This <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbWriter"/> instance.</returns>
+        </member>
+        <member name="F:Metrics.InfluxDB.InfluxdbConfigExtensions.JsonObsoleteMsg">
+            <summary>The obsolete message string for JSON format.</summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDb(Metrics.Reports.MetricsReports,System.String,System.UInt16,System.String,System.String,System.String,System.TimeSpan)">
+            <summary>
+            Uses the old InfluxdbReport which uses JSON and is only compatible with InfluxDB versions before v0.9.1.
+            </summary>
+            <param name="reports"></param>
+            <param name="host"></param>
+            <param name="port"></param>
+            <param name="user"></param>
+            <param name="pass"></param>
+            <param name="database"></param>
+            <param name="interval"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbConfigExtensions.WithInfluxDb(Metrics.Reports.MetricsReports,System.Uri,System.TimeSpan)">
+            <summary>
+            Uses the old InfluxdbReport which uses JSON and is only compatible with InfluxDB versions before v0.9.1.
+            </summary>
+            <param name="reports"></param>
+            <param name="influxdbUri"></param>
+            <param name="interval"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.InfluxdbHttpReport">
+            <summary>
+            A metrics report that sends data to an InfluxDB server.
+            This sends the data using the InfluxDB LineProtocol syntax over HTTP.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbHttpReport.#ctor(System.Uri)">
+            <summary>
+            Creates a new InfluxDB report that uses the Line Protocol syntax over HTTP.
+            </summary>
+            <param name="influxDbUri">The URI of the InfluxDB server, including any query string parameters.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbHttpReport.#ctor(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Creates a new InfluxDB report that uses the Line Protocol syntax over HTTP.
+            </summary>
+            <param name="config">The InfluxDB configuration object.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbHttpReport.GetDefaultConfig(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Gets the default configuration by setting the <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Writer"/>
+            property to a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbHttpWriter"/> instance if it is not set.
+            </summary>
+            <param name="defaultConfig">The configuration to apply the settings to. If null, creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance.</param>
+            <returns>A default <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance for the derived type's implementation.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.InfluxdbJsonReport">
+            <summary>
+            A metrics report that sends data to an InfluxDB server. This sends the data using the InfluxDB JSON protocol over HTTP.
+            NOTE: It is recommended to NOT use the JSON reporter because of performance issues, and support for JSON has been
+            removed from InfluxDB in versions later than v0.9.1. It is recommended to use the HTTP or UDP reporters instead.
+            See for more information: https://docs.influxdata.com/influxdb/v0.13/write_protocols/json/
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbJsonReport.#ctor(System.Uri)">
+            <summary>
+            Creates a new InfluxDB report that uses the JSON protocol over HTTP.
+            NOTE: It is recommended to NOT use the JSON reporter because of performance issues, and support for JSON has been
+            removed from InfluxDB in versions later than v0.9.1. It is recommended to use the HTTP or UDP reporters instead.
+            See for more information: https://docs.influxdata.com/influxdb/v0.13/write_protocols/json/
+            </summary>
+            <param name="influxDbUri">The URI of the InfluxDB server, including any query string parameters.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbJsonReport.#ctor(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Creates a new InfluxDB report that uses the JSON protocol over HTTP.
+            NOTE: It is recommended to NOT use the JSON reporter because of performance issues, and support for JSON has been
+            removed from InfluxDB in versions later than v0.9.1. It is recommended to use the HTTP or UDP reporters instead.
+            See for more information: https://docs.influxdata.com/influxdb/v0.13/write_protocols/json/
+            </summary>
+            <param name="config">The InfluxDB configuration object.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbJsonReport.GetDefaultConfig(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Gets the default configuration by setting the <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Writer"/>
+            property to a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbJsonWriter"/> instance if it is not set.
+            The <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Formatter"/> is set to a no-op default formatter that does not modify identifier names, if the formatter is not set.
+            The <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Precision"/> is set to <see cref="F:Metrics.InfluxDB.Model.InfluxPrecision.Seconds"/> because it is the only precision supported by the JSON protocol.
+            </summary>
+            <param name="defaultConfig">The configuration to apply the settings to. If null, creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance.</param>
+            <returns>A default <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance for the derived type's implementation.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.InfluxdbReport">
+            <summary>
+            The old JSON based InfluxDB reporter.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbReport.#ctor(System.Uri)">
+            <summary>
+            Creates a new InfluxDB reporter using the JSON protocol.
+            </summary>
+            <param name="influxdb">The InfluxDB URI.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbReport.StartReport(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbReport.EndReport(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbReport.ReportGauge(System.String,System.Double,Metrics.Unit,Metrics.MetricTags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbReport.ReportCounter(System.String,Metrics.MetricData.CounterValue,Metrics.Unit,Metrics.MetricTags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbReport.ReportMeter(System.String,Metrics.MetricData.MeterValue,Metrics.Unit,Metrics.TimeUnit,Metrics.MetricTags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbReport.ReportHistogram(System.String,Metrics.MetricData.HistogramValue,Metrics.Unit,Metrics.MetricTags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbReport.ReportTimer(System.String,Metrics.MetricData.TimerValue,Metrics.Unit,Metrics.TimeUnit,Metrics.TimeUnit,Metrics.MetricTags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbReport.ReportHealth(Metrics.HealthStatus)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Metrics.InfluxDB.InfluxdbUdpReport">
+            <summary>
+            A metrics report that sends data to an InfluxDB server.
+            This sends the data using the InfluxDB LineProtocol syntax over UDP.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbUdpReport.#ctor(System.Uri)">
+            <summary>
+            Creates a new InfluxDB report that uses the Line Protocol syntax over UDP.
+            </summary>
+            <param name="influxDbUri">The UDP URI of the InfluxDB server.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbUdpReport.#ctor(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Creates a new InfluxDB report that uses the Line Protocol syntax over UDP.
+            </summary>
+            <param name="config">The InfluxDB configuration object.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.InfluxdbUdpReport.GetDefaultConfig(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Gets the default configuration by setting the <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Writer"/>
+            property to a new <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbUdpWriter"/> instance if it is not set.
+            </summary>
+            <param name="defaultConfig">The configuration to apply the settings to. If null, creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance.</param>
+            <returns>A default <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> instance for the derived type's implementation.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Model.InfluxBatch">
+            <summary>
+            A collection of <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> elements that exposes helper methods to
+            genereate a batch insert query string formatted in the InfluxDB line protocol syntax.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxBatch.#ctor">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/> that is empty and has the default values.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxBatch.#ctor(System.Int32)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/> that is empty and has the specified initial capacity.
+            </summary>
+            <param name="capacity">The number of elements that the collection can initially store.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxBatch.#ctor(System.Collections.Generic.IEnumerable{Metrics.InfluxDB.Model.InfluxRecord})">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/> that contains elements copied from the specified collection.
+            </summary>
+            <param name="collection">The collection whose elements are copied to the new batch.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxBatch.ToString">
+            <summary>
+            Converts the <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/> to a string in the line protocol syntax.
+            Each record is separated by a newline character, but the complete output does not end in one.
+            </summary>
+            <returns>A string representing all records in the batch formatted in the line protocol format.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Model.InfluxConfig">
+            <summary>
+            Configuration for the InfluxDB reporter.
+            </summary>
+        </member>
+        <member name="T:Metrics.InfluxDB.Model.InfluxConfig.Default">
+            <summary>
+            Default InfluxDB configuration settings.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Default.PortHttp">
+            <summary>
+            The default port when using the HTTP protocol to connect to the InfluxDB server. This value is: 8086
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Default.Precision">
+            <summary>
+            The default <see cref="T:Metrics.InfluxDB.Model.InfluxPrecision"/> specifier value. This value is: <see cref="F:Metrics.InfluxDB.Model.InfluxPrecision.Seconds"/>
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Hostname">
+            <summary>
+            The hostname of the InfluxDB server.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Port">
+            <summary>
+            The port of the InfluxDB server. Set to null to use the default
+            port for the chosen transport and protocol, if there is one.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Database">
+            <summary>
+            The name of the database on the InfluxDB server to write the datapoints to.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Username">
+            <summary>
+            The username used to authenticate with the InfluxDB server, if authentication is required.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Password">
+            <summary>
+            The password used to authenticate with the InfluxDB server, if authentication is required.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.RetentionPolicy">
+            <summary>
+            The retention policy to use when writing datapoints to the InfluxDB database.
+            If this is null, the database's default retention policy is used.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Precision">
+            <summary>
+            The precision of the timestamp value in the line protocol syntax.
+            It is recommended to use as large a precision as possible to improve compression and bandwidth usage.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Converter">
+            <summary>
+            The <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbConverter"/> is used to convert metric values into <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> objects.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Formatter">
+            <summary>
+            The <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbFormatter"/> is used to format the context and metric names into strings which are
+            used as the table name to insert <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>s into. This also optionally formats the tag
+            and field keys into column names by converting the case and replacing spaces with another character.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxConfig.Writer">
+            <summary>
+            The <see cref="T:Metrics.InfluxDB.Adapters.InfluxdbWriter"/> used to write formatted <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>s to the database.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxConfig.#ctor">
+            <summary>
+            Creates a new InfluxDB configuration object with default values.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxConfig.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new InfluxDB configuration object with the specified hostname and database.
+            </summary>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="database">The database name to write values to. This should be null if using UDP since the database is defined in the UDP endpoint configuration on the InfluxDB server.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxConfig.#ctor(System.String,System.String,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision})">
+            <summary>
+            Creates a new InfluxDB configuration object with the specified hostname, database, and precision.
+            </summary>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="database">The database name to write values to. This should be null if using UDP since the database is defined in the UDP endpoint configuration on the InfluxDB server.</param>
+            <param name="precision">The precision of the timestamp value in the line protocol syntax.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxConfig.#ctor(System.String,System.String,System.String,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision})">
+            <summary>
+            Creates a new InfluxDB configuration object with the specified hostname, database, retention policy, and precision.
+            </summary>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="database">The database name to write values to. This should be null if using UDP since the database is defined in the UDP endpoint configuration on the InfluxDB server.</param>
+            <param name="retentionPolicy">The retention policy to use when writing datapoints to the InfluxDB database, or null to use the database's default retention policy.</param>
+            <param name="precision">The precision of the timestamp value in the line protocol syntax.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxConfig.#ctor(System.String,System.Nullable{System.UInt16},System.String)">
+            <summary>
+            Creates a new InfluxDB configuration object with the specified hostname, port, and database.
+            </summary>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="port">The port number to connect to on the InfluxDB server, or null to use the default port number.</param>
+            <param name="database">The database name to write values to. This should be null if using UDP since the database is defined in the UDP endpoint configuration on the InfluxDB server.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxConfig.#ctor(System.String,System.Nullable{System.UInt16},System.String,System.String,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision})">
+            <summary>
+            Creates a new InfluxDB configuration object with the specified hostname, port, database, retention policy, and precision.
+            </summary>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="port">The port number to connect to on the InfluxDB server, or null to use the default port number.</param>
+            <param name="database">The database name to write values to. This should be null if using UDP since the database is defined in the UDP endpoint configuration on the InfluxDB server.</param>
+            <param name="retentionPolicy">The retention policy to use when writing datapoints to the InfluxDB database, or null to use the database's default retention policy.</param>
+            <param name="precision">The precision of the timestamp value in the line protocol syntax.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxConfig.#ctor(System.String,System.Nullable{System.UInt16},System.String,System.String,System.String,System.String,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision})">
+            <summary>
+            Creates a new InfluxDB configuration object with the specified hostname, port, database, retention policy, precision, and credentials.
+            </summary>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="port">The port number to connect to on the InfluxDB server, or null to use the default port number.</param>
+            <param name="database">The database name to write values to. This should be null if using UDP since the database is defined in the UDP endpoint configuration on the InfluxDB server.</param>
+            <param name="username">The username to use to connect to the InfluxDB server, or null if authentication is not used.</param>
+            <param name="password">The password to use to connect to the InfluxDB server, or null if authentication is not used.</param>
+            <param name="retentionPolicy">The retention policy to use when writing datapoints to the InfluxDB database, or null to use the database's default retention policy.</param>
+            <param name="precision">The precision of the timestamp value in the line protocol syntax.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxConfig.#ctor(System.Uri)">
+            <summary>
+            Creates a new InfluxDB configuration object with values initialized from the URI.
+            </summary>
+            <param name="influxDbUri">The URI of the InfluxDB server, including any query string parameters.</param>
+        </member>
+        <member name="T:Metrics.InfluxDB.Model.InfluxField">
+            <summary>
+            An InfluxDB field key/value pair which can be added to an <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxField.Key">
+            <summary>
+            The field key.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxField.Value">
+            <summary>
+            The field value.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxField.IsEmpty">
+            <summary>
+            Returns true if this instance is equal to the Empty instance.
+            </summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxField.Empty">
+            <summary>
+            An empty <see cref="T:Metrics.InfluxDB.Model.InfluxField"/>.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxField.#ctor(System.String,System.Object)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxField"/> with the specified key and value.
+            </summary>
+            <param name="key">The field key name.</param>
+            <param name="value">The field value.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxField.ToString">
+            <summary>
+            Converts the <see cref="T:Metrics.InfluxDB.Model.InfluxField"/> to a string in the line protocol format.
+            </summary>
+            <returns>A string representing the field in the line protocol format.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxField.Equals(System.Object)">
+            <summary>
+            Returns true if the specified object is an InfluxTag object and both the key and value are equal.
+            </summary>
+            <param name="obj">The object to compare.</param>
+            <returns>true if the two objects are equal; false otherwise.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxField.Equals(Metrics.InfluxDB.Model.InfluxField)">
+            <summary>
+            Returns true if both the key and value are equal.
+            </summary>
+            <param name="other">The <see cref="T:Metrics.InfluxDB.Model.InfluxField"/> to compare.</param>
+            <returns>true if the two objects are equal; false otherwise.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxField.GetHashCode">
+            <summary>
+            Gets the hash code of the key.
+            </summary>
+            <returns>The hash code of the key.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxField.op_Equality(Metrics.InfluxDB.Model.InfluxField,Metrics.InfluxDB.Model.InfluxField)">
+            <summary>
+            Returns true if both the key and value are equal.
+            </summary>
+            <param name="f1">The first field.</param>
+            <param name="f2">The second field.</param>
+            <returns>true if the two objects are equal; false otherwise.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxField.op_Inequality(Metrics.InfluxDB.Model.InfluxField,Metrics.InfluxDB.Model.InfluxField)">
+            <summary>
+            Returns true if either the keys or values are not equal.
+            </summary>
+            <param name="f1">The first field.</param>
+            <param name="f2">The second field.</param>
+            <returns>true if the two objects are not equal; false otherwise.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Model.InfluxLineProtocol">
+            <summary>
+            Defines static methods to convert influx tags, fields, records, and batches to a string in the line protocol format.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.ToLineProtocol(Metrics.InfluxDB.Model.InfluxTag)">
+            <summary>
+            Converts the <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/> to a string in the line protocol format.
+            </summary>
+            <param name="tag">The <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/> to generate the line protocol string for.</param>
+            <returns>A string representing the tag in the line protocol format.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.ToLineProtocol(Metrics.InfluxDB.Model.InfluxField)">
+            <summary>
+            Converts the <see cref="T:Metrics.InfluxDB.Model.InfluxField"/> to a string in the line protocol format.
+            </summary>
+            <param name="field">The <see cref="T:Metrics.InfluxDB.Model.InfluxField"/> to generate the line protocol string for.</param>
+            <returns>A string representing the field in the line protocol format.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.ToLineProtocol(Metrics.InfluxDB.Model.InfluxRecord,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision})">
+            <summary>
+            Converts the <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> to a string in the line protocol format.
+            The returned string does not end in a newline character.
+            </summary>
+            <param name="record">The <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> to generate the line protocol string for.</param>
+            <param name="precision">The timestamp precision to use in the LineProtocol syntax. If null, the default precision <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Default.Precision"/> is used.</param>
+            <returns>A string representing the record in the line protocol format.</returns>
+            <remarks>Creates output in line protocol syntax (tags and timestamp are optional):
+            <c>measurement[,tag_key1=tag_value1...] field_key=field_value[,field_key2=field_value2] [timestamp]</c>
+            According to the InfluxDB docs, sorted tags get a performance boost when inserting data, see:
+            https://docs.influxdata.com/influxdb/v0.13/write_protocols/line/#key
+            </remarks>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.ToLineProtocol(Metrics.InfluxDB.Model.InfluxBatch,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision})">
+            <summary>
+            Converts the <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/> to a string in the line protocol syntax.
+            Each record is separated by a newline character, but the complete output does not end in a newline.
+            </summary>
+            <param name="batch">The <see cref="T:Metrics.InfluxDB.Model.InfluxBatch"/> to generate the line protocol string for.</param>
+            <param name="precision">The timestamp precision to use in the LineProtocol syntax. If null, the default precision <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Default.Precision"/> is used.</param>
+            <returns>A string representing all records in the batch formatted in the line protocol format.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.FormatValue(System.Object)">
+            <summary>
+            Formats the field value in the appropriate line protocol format based on the type of the value object.
+            The value type must be a string, boolean, or integral or floating-point type.
+            </summary>
+            <param name="value">The field value to format.</param>
+            <returns>The field value formatted as a string used in the line protocol format.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.FormatValue(System.Int64)">
+            <summary>
+            Formats the integral value to a string used in the line protocol format.
+            </summary>
+            <param name="value">The integral value to format.</param>
+            <returns>The value formatted as a string used in the line protocol format.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.FormatValue(System.Double)">
+            <summary>
+            Formats the floating-point value to a string used in the line protocol format.
+            </summary>
+            <param name="value">The floating-point value to format.</param>
+            <returns>The value formatted as a string used in the line protocol format.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.FormatValue(System.Boolean)">
+            <summary>
+            Formats the boolean value to a True or False string used in the line protocol format.
+            </summary>
+            <param name="value">The boolean value to format.</param>
+            <returns>The value formatted as a string used in the line protocol format.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.FormatValue(System.String)">
+            <summary>
+            Formats the string by enclosing it in quotes and escaping any existing quotes within the string.
+            This method should only be used when formatting string field values, but not tag values.
+            </summary>
+            <param name="value">The string field value to format.</param>
+            <returns>The specified string field value properly escaped and enclosed in quotes.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.EscapeValue(System.String)">
+            <summary>
+            Escapes the value by replacing spaces, commas, and equal signs with a leading backslash.
+            </summary>
+            <param name="value">The value to escape.</param>
+            <returns>The escaped value.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxLineProtocol.FormatTimestamp(System.DateTime,Metrics.InfluxDB.Model.InfluxPrecision)">
+            <summary>
+            Formats the timestamp to an integer string with the specified precision.
+            </summary>
+            <param name="timestamp">The timestamp to format.</param>
+            <param name="precision">The precision to format the timestamp to.</param>
+            <returns>The timestamp formatted to a string with the specified precision.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Model.InfluxPrecision">
+            <summary>
+            The precision to format timestamp values in the InfluxDB LineProtocol syntax.
+            </summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxPrecision.Nanoseconds">
+            <summary>
+            Nanosecond precision. This is the default precision used by InfluxDB when no precision specifier is defined.
+            </summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxPrecision.Microseconds">
+            <summary>
+            Microsecond precision.
+            </summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxPrecision.Milliseconds">
+            <summary>
+            Millisecond precision.
+            </summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxPrecision.Seconds">
+            <summary>
+            Second precision.
+            </summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxPrecision.Minutes">
+            <summary>
+            Minute precision.
+            </summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxPrecision.Hours">
+            <summary>
+            Hour precision.
+            </summary>
+        </member>
+        <member name="T:Metrics.InfluxDB.Model.InfluxRecord">
+            <summary>
+            A single InfluxDB record that defines the name, tags, fields, and timestamp values to insert into InfluxDB.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxRecord.Name">
+            <summary>
+            The measurement or series name. This value is required.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxRecord.Tags">
+            <summary>
+            A list of tag key/value pairs associated with this record. This value is optional.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxRecord.Fields">
+            <summary>
+            A list of field key/value pairs associated with this record.
+            This field is required, at least one field must be specified.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxRecord.Timestamp">
+            <summary>
+            The record timestamp. This value is optional. If this is null the timestamp is not included
+            in the line value and the current timestamp will be used by default by the InfluxDB database.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxRecord.#ctor(System.String,System.Collections.Generic.IEnumerable{Metrics.InfluxDB.Model.InfluxField},System.Nullable{System.DateTime})">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>.
+            </summary>
+            <param name="name">The measurement or series name. This value is required and cannot be null or empty.</param>
+            <param name="fields">The field values for this record.</param>
+            <param name="timestamp">The optional timestamp for this record.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxRecord.#ctor(System.String,System.Collections.Generic.IEnumerable{Metrics.InfluxDB.Model.InfluxTag},System.Collections.Generic.IEnumerable{Metrics.InfluxDB.Model.InfluxField},System.Nullable{System.DateTime})">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>.
+            </summary>
+            <param name="name">The measurement or series name. This value is required and cannot be null or empty.</param>
+            <param name="tags">The optional tags to associate with this record.</param>
+            <param name="fields">The field values for this record.</param>
+            <param name="timestamp">The optional timestamp for this record.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxRecord.ToString">
+            <summary>
+            Converts the <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/> to a string in the line protocol syntax.
+            The returned string does not end in a newline character.
+            </summary>
+            <returns>A string representing the record in the line protocol format.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Model.InfluxTag">
+            <summary>
+            An InfluxDB tag key/value pair which can be added to an <see cref="T:Metrics.InfluxDB.Model.InfluxRecord"/>.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxTag.Key">
+            <summary>
+            The tag key.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxTag.Value">
+            <summary>
+            The tag value.
+            </summary>
+        </member>
+        <member name="P:Metrics.InfluxDB.Model.InfluxTag.IsEmpty">
+            <summary>
+            Returns true if this instance is equal to the Empty instance.
+            </summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxTag.Empty">
+            <summary>
+            An empty <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/>.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxTag.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/> from the specified key/value pair.
+            Both the key and value are required and cannot be null or empty.
+            </summary>
+            <param name="key">The tag key name.</param>
+            <param name="value">The tag value.</param>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxTag.ToString">
+            <summary>
+            Converts the <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/> to a string in the line protocol format.
+            </summary>
+            <returns>A string representing the tag in the line protocol format.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxTag.Equals(System.Object)">
+            <summary>
+            Returns true if the specified object is an <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/> object and both the key and value are equal.
+            </summary>
+            <param name="obj">The object to compare.</param>
+            <returns>true if the two objects are equal; false otherwise.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxTag.Equals(Metrics.InfluxDB.Model.InfluxTag)">
+            <summary>
+            Returns true if both the key and value are equal.
+            </summary>
+            <param name="other">The <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/> to compare.</param>
+            <returns>true if the two objects are equal; false otherwise.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxTag.GetHashCode">
+            <summary>
+            Gets the hash code of the key.
+            </summary>
+            <returns>The hash code of the key.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxTag.op_Equality(Metrics.InfluxDB.Model.InfluxTag,Metrics.InfluxDB.Model.InfluxTag)">
+            <summary>
+            Returns true if both the key and value are equal.
+            </summary>
+            <param name="t1">The first tag.</param>
+            <param name="t2">The second tag.</param>
+            <returns>true if the two objects are equal; false otherwise.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxTag.op_Inequality(Metrics.InfluxDB.Model.InfluxTag,Metrics.InfluxDB.Model.InfluxTag)">
+            <summary>
+            Returns true if either the keys or values are not equal.
+            </summary>
+            <param name="t1">The first tag.</param>
+            <param name="t2">The second tag.</param>
+            <returns>true if the two objects are not equal; false otherwise.</returns>
+        </member>
+        <member name="T:Metrics.InfluxDB.Model.InfluxUtils">
+            <summary>
+            Helper methods for InfluxDB.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.LowerAndReplaceSpaces(System.String,System.Boolean,System.String)">
+            <summary>
+            Converts the string to lowercase and replaces all spaces with the specified character (underscore by default).
+            </summary>
+            <param name="value">The string value to lowercase and replace spaces on.</param>
+            <param name="lowercase">If true, converts the string to lowercase.</param>
+            <param name="replaceChars">The character(s) to replace all space characters with (underscore by default). If <see cref="F:System.String.Empty"/>, removes all spaces. If null, spaces are not replaced.</param>
+            <returns>A copy of the string converted to lowercase with all spaces replaced with the specified character.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.ToShortName(Metrics.InfluxDB.Model.InfluxPrecision)">
+            <summary>
+            Gets the short name (n,u,ms,s,m,h) for the InfluxDB precision specifier to be used in the URI query string.
+            </summary>
+            <param name="precision">The precision to get the short name for.</param>
+            <returns>The short name for the <see cref="T:Metrics.InfluxDB.Model.InfluxPrecision"/> value.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.FromShortName(System.String)">
+            <summary>
+            Gets the <see cref="T:Metrics.InfluxDB.Model.InfluxPrecision"/> from the short name (n,u,ms,s,m,h) retrieved using <see cref="M:Metrics.InfluxDB.Model.InfluxUtils.ToShortName(Metrics.InfluxDB.Model.InfluxPrecision)"/>.
+            </summary>
+            <param name="precision">The short name of the precision specifier (n,u,ms,s,m,h).</param>
+            <returns>The <see cref="T:Metrics.InfluxDB.Model.InfluxPrecision"/> for the specified short name.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.ToInfluxTags(Metrics.MetricTags[])">
+            <summary>
+            Parses the MetricTags into <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/>s. Returns an <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/> for each tag that is in the format: {key}={value}.
+            </summary>
+            <param name="tags">The tags to parse into <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/>s objects.</param>
+            <returns>A sequence of <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/>s parsed from the specified <see cref="T:Metrics.MetricTags"/>.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.ToInfluxTags(System.String[])">
+            <summary>
+            Parses the specified tags into a sequence of <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/>s.
+            </summary>
+            <param name="tags">The tags to parse into a sequence of <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/>s.</param>
+            <returns>The specified tags parsed into a sequence of <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/>s.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.ToInfluxTags(System.String)">
+            <summary>
+            Parses the string of comma-separated tags into a sequence of <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/>s.
+            </summary>
+            <param name="commaSeparatedTags">The comma-separated tags to parse into a sequence of InfluxTags.</param>
+            <returns>The specified comma-separated tags parsed into a sequence of InfluxTags.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.ToInfluxTag(System.String)">
+            <summary>
+            Splits the tag into a key/value pair using the equals sign. The tag should be in the format: {key}={value}.
+            If the tag is in an invalid format or cannot be parsed, this returns <see cref="F:Metrics.InfluxDB.Model.InfluxTag.Empty"/>.
+            </summary>
+            <param name="keyValuePair">The tag to parse into an <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/>.</param>
+            <returns>The tag parsed into an <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/>, or <see cref="F:Metrics.InfluxDB.Model.InfluxTag.Empty"/> if the input string is in an invalid format or could not be parsed.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.JoinTags(System.String,Metrics.MetricTags[])">
+            <summary>
+            Parses any tags from the <paramref name="itemName"/> and concatenates them to the end of the specified <see cref="T:Metrics.MetricTags"/> list.
+            If there are multiple tags with the same key in the resulting list, tags that occur later in the sequence override earlier tags.
+            The <paramref name="itemName"/> can be a single tag value or a comma-separated list of values. Any values that are not in the
+            key/value pair format ({key}={value}) are ignored. One exception to this is if the <paramref name="itemName"/> only has a single value
+            and that value is not a key/value pair, an <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/> will be created for it using "Name" as the key and itself as the value.
+            </summary>
+            <param name="itemName">The item set name, this is a comma-separated list of key/value pairs.</param>
+            <param name="tags">The tags to add in addition to any tags in the item set name.</param>
+            <returns>A sequence of InfluxTags that contain the tags in <paramref name="tags"/> followed by any valid tags from the item name.</returns>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxUtils.ValidValueTypes">
+            <summary>
+            The supported types that can be used for an <see cref="T:Metrics.InfluxDB.Model.InfluxTag"/> or <see cref="T:Metrics.InfluxDB.Model.InfluxField"/> value.
+            </summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.IsValidValueType(System.Type)">
+            <summary>
+            Determines if the specified type is a valid InfluxDB value type.
+            The valid types are String, Boolean, integral or floating-point type.
+            </summary>
+            <param name="type">The type to check.</param>
+            <returns>true if the type is a valid InfluxDB value type; false otherwise.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.IsIntegralType(System.Type)">
+            <summary>
+            Determines if the specified type is an integral type.
+            The valid integral types are Byte, Int16, Int32, Int64, and their (un)signed counterparts.
+            </summary>
+            <param name="type">The type to check.</param>
+            <returns>true if the type is an integral type; false otherwise.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.IsFloatingPointType(System.Type)">
+            <summary>
+            Determines if the specified type is a floating-point type.
+            The valid floating-point types are Single, Double, and Decimal.
+            </summary>
+            <param name="type">The type to check.</param>
+            <returns>true if the type is a floating-point type; false otherwise.</returns>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxUtils.SchemeJson">
+            <summary>The JSON URI scheme.</summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxUtils.SchemeHttp">
+            <summary>The HTTP URI scheme.</summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxUtils.SchemeHttps">
+            <summary>The HTTPS URI scheme.</summary>
+        </member>
+        <member name="F:Metrics.InfluxDB.Model.InfluxUtils.SchemeUdp">
+            <summary>The UDP URI scheme.</summary>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.FormatInfluxUri(Metrics.InfluxDB.Model.InfluxConfig)">
+            <summary>
+            Creates a URI for InfluxDB using the values specified in the <see cref="T:Metrics.InfluxDB.Model.InfluxConfig"/> object.
+            </summary>
+            <param name="config">The configuration object to get the relevant fields to build the URI from.</param>
+            <returns>A new InfluxDB URI using the configuration specified in the <paramref name="config"/> parameter.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.FormatInfluxUri(System.String,System.String,System.String,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision})">
+            <summary>
+            Creates a URI for the specified hostname and database. Uses no authentication, and optionally uses the default port (8086), retention policy (DEFAULT), and time precision (s).
+            </summary>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="database">The name of the database to write records to.</param>
+            <param name="retentionPolicy">The retention policy to use. Leave blank to use the server default of "DEFAULT".</param>
+            <param name="precision">The timestamp precision specifier used in the line protocol writes. Leave blank to use the default of <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Default.Precision"/>.</param>
+            <returns>A new InfluxDB URI using the specified parameters.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.FormatInfluxUri(System.String,System.Nullable{System.UInt16},System.String,System.String,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision})">
+            <summary>
+            Creates a URI for the specified hostname and database. Uses no authentication, and optionally uses the default retention policy (DEFAULT) and time precision (s).
+            </summary>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="port">The port number of the InfluxDB server. Set to zero to use the default of <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Default.PortHttp"/>. This value is required for the UDP protocol.</param>
+            <param name="database">The name of the database to write records to.</param>
+            <param name="retentionPolicy">The retention policy to use. Leave blank to use the server default of "DEFAULT".</param>
+            <param name="precision">The timestamp precision specifier used in the line protocol writes. Leave blank to use the default of <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Default.Precision"/>.</param>
+            <returns>A new InfluxDB URI using the specified parameters.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.FormatInfluxUri(System.String,System.Nullable{System.UInt16},System.String,System.String,System.String,System.String,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision})">
+            <summary>
+            Creates a URI for the specified hostname and database using authentication. Optionally uses the default retention policy (DEFAULT) and time precision (s).
+            </summary>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="port">The port number of the InfluxDB server. Set to zero to use the default of <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Default.PortHttp"/>. This value is required for the UDP protocol.</param>
+            <param name="database">The name of the database to write records to.</param>
+            <param name="username">The username to use to authenticate to the InfluxDB server. Leave blank to skip authentication.</param>
+            <param name="password">The password to use to authenticate to the InfluxDB server. Leave blank to skip authentication.</param>
+            <param name="retentionPolicy">The retention policy to use. Leave blank to use the server default of "DEFAULT".</param>
+            <param name="precision">The timestamp precision specifier used in the line protocol writes. Leave blank to use the default of <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Default.Precision"/>.</param>
+            <returns>A new InfluxDB URI using the specified parameters.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.FormatInfluxUri(System.String,System.String,System.Nullable{System.UInt16},System.String,System.String,System.String,System.String,System.Nullable{Metrics.InfluxDB.Model.InfluxPrecision})">
+            <summary>
+            Creates a URI for the specified hostname and database using authentication. Optionally uses the default retention policy (DEFAULT) and time precision (s).
+            </summary>
+            <param name="scheme">The URI scheme type, ie. http, https, net.udp</param>
+            <param name="host">The hostname or IP address of the InfluxDB server.</param>
+            <param name="port">The port number of the InfluxDB server. Set to zero to use the default of <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Default.PortHttp"/>. This value is required for the UDP protocol.</param>
+            <param name="database">The name of the database to write records to.</param>
+            <param name="username">The username to use to authenticate to the InfluxDB server. Leave blank to skip authentication.</param>
+            <param name="password">The password to use to authenticate to the InfluxDB server. Leave blank to skip authentication.</param>
+            <param name="retentionPolicy">The retention policy to use. Leave blank to use the server default of "DEFAULT".</param>
+            <param name="precision">The timestamp precision specifier used in the line protocol writes. Leave blank to use the default of <see cref="P:Metrics.InfluxDB.Model.InfluxConfig.Default.Precision"/>.</param>
+            <returns>A new InfluxDB URI using the specified parameters.</returns>
+        </member>
+        <member name="M:Metrics.InfluxDB.Model.InfluxUtils.ParseQueryString(System.Uri)">
+            <summary>
+            Parses the URI query string into a key/value collection.
+            </summary>
+            <param name="uri">The URI to parse</param>
+            <returns>A key/value collection that contains the query parameters.</returns>
+        </member>
+    </members>
+</doc>
