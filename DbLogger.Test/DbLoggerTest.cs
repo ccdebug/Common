@@ -10,7 +10,7 @@ namespace DbLogger.Test
         [TestMethod]
         public void TestPublish()
         {
-            for (int i = 0; i < 100000; i++)
+            for (var i = 0; i < 100000; i++)
             {
                 var message = new LogMessage() 
                 { 

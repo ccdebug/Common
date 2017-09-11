@@ -10,29 +10,30 @@ namespace DbLogger
 {
     public class DisruptorUtils : IDisposable
     {
-        private const int RING_BUFFER_SIZE = 1024 * 1024;
-        private const int CONSUMER_NUM = 4;     //默认4个消费者
-        private static readonly Disruptor<LogMessageEvent> _disruptor;
-        private static readonly LogMessageEventTranslator _tanslator;
+        private const int RingBufferSize = 1024 * 1024;
+        private const int ConsumerNum = 4;     //默认4个消费者
+        private static readonly Disruptor<LogMessageEvent> Disruptor;
+        private static readonly LogMessageEventTranslator Tanslator;
 
         static DisruptorUtils()
         {
-            _disruptor = new Disruptor<LogMessageEvent>(() => new LogMessageEvent(), RING_BUFFER_SIZE,
+            Disruptor = new Disruptor<LogMessageEvent>(() => new LogMessageEvent(), RingBufferSize,
                 TaskScheduler.Current, ProducerType.Single, new YieldingWaitStrategy());
 
             //初始化4个消费者
             var consumers = new List<LogMessageWorkHandler>();
-            for (int i = 1; i < CONSUMER_NUM; i++)
+            for (var i = 1; i < ConsumerNum; i++)
 			{
 			    consumers.Add(new LogMessageWorkHandler());
 			}
 
             //每个事件被一个消费者消费
-            _disruptor.HandleEventsWithWorkerPool(consumers.ToArray());
+            // ReSharper disable once CoVariantArrayConversion
+            Disruptor.HandleEventsWithWorkerPool(consumers.ToArray());
 
-            _tanslator = new LogMessageEventTranslator();   //初始化生产者
+            Tanslator = new LogMessageEventTranslator();   //初始化生产者
 
-            _disruptor.Start();
+            Disruptor.Start();
 
         }
 
@@ -42,14 +43,14 @@ namespace DbLogger
         /// <param name="logMessage"></param>
         public static void Publish(LogMessage logMessage)
         {
-            _disruptor.RingBuffer.PublishEvent(_tanslator, logMessage);
+            Disruptor.RingBuffer.PublishEvent(Tanslator, logMessage);
 
-            MetricsInfluxDb.Metrics.Mark(MetricKeys.LOGMESSAGE_PUBLISH);
+            MetricsInfluxDb.Metrics.Mark(MetricKeys.LogmessagePublish);
         }
 
         public void Dispose()
         {
-            _disruptor.Shutdown();
+            Disruptor.Shutdown();
         }
     }
 }

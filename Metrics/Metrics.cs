@@ -12,10 +12,10 @@ namespace MetricsInfluxDb
 {
     public class Metrics
     {
-        private static readonly MetricTags DEFAULT_TAGS = new MetricTags(string.Format("AppId={0}", AppSettings.AppId)
-            , string.Format("ServerIP={0}", IPHelper.GetLocalIP()));
+        private static readonly MetricTags DefaultTags = new MetricTags(string.Format("AppId={0}", AppSettings.AppId)
+            , string.Format("ServerIP={0}", IpHelper.GetLocalIp()));
 
-        private static log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(Metrics));
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(typeof(Metrics));
 
         static Metrics()
         {
@@ -30,7 +30,7 @@ namespace MetricsInfluxDb
             }
             catch (Exception ex)
             {
-                _logger.Error("初始化Metrics失败，" + ex.ToString());
+                Logger.Error("初始化Metrics失败，" + ex.ToString());
             }
         }
 
@@ -38,7 +38,7 @@ namespace MetricsInfluxDb
 
         public static void Gauge(string name, double value)
         {
-            Gauge(name, value, DEFAULT_TAGS);
+            Gauge(name, value, DefaultTags);
         }
 
         public static void Gauge(string name, double value, MetricTags tags)
@@ -70,13 +70,13 @@ namespace MetricsInfluxDb
 
         public static void Increment(string name)
         {
-            var counter = Counter(name, Unit.Requests, DEFAULT_TAGS);
+            var counter = Counter(name, Unit.Requests, DefaultTags);
             counter.Increment();
         }
 
         public static void Increment(string name, Unit unit)
         {
-            var counter = Counter(name, unit, DEFAULT_TAGS);
+            var counter = Counter(name, unit, DefaultTags);
             counter.Increment();
         }
 
@@ -90,12 +90,12 @@ namespace MetricsInfluxDb
         #region Meter
         public static void Mark(string name)
         {
-            Mark(name, Unit.Requests, TimeUnit.Seconds, DEFAULT_TAGS);
+            Mark(name, Unit.Requests, TimeUnit.Seconds, DefaultTags);
         }
 
         public static void Mark(string name, Unit unit)
         {
-            Mark(name, unit, TimeUnit.Seconds, DEFAULT_TAGS);
+            Mark(name, unit, TimeUnit.Seconds, DefaultTags);
         }
 
         public static void Mark(string name, MetricTags tags)
@@ -182,12 +182,12 @@ namespace MetricsInfluxDb
 
         public static Histogram Histogram(string name, Unit unit)
         {
-            return Metric.Histogram(name, unit, SamplingType.Default, DEFAULT_TAGS);
+            return Metric.Histogram(name, unit, SamplingType.Default, DefaultTags);
         }
 
         public static Histogram Histogram(string name)
         {
-            return Metric.Histogram(name, Unit.Requests, SamplingType.Default, DEFAULT_TAGS);
+            return Metric.Histogram(name, Unit.Requests, SamplingType.Default, DefaultTags);
         }
 
         public static void Update(string name, long value, string userValue = null)
@@ -202,12 +202,12 @@ namespace MetricsInfluxDb
 
         public static Timer Timer(string name)
         {
-            return Metric.Timer(name, Unit.Requests, tags: DEFAULT_TAGS);
+            return Metric.Timer(name, Unit.Requests, tags: DefaultTags);
         }
 
         public static Timer Timer(string name, Unit unit)
         {
-            return Metric.Timer(name, unit, tags: DEFAULT_TAGS);
+            return Metric.Timer(name, unit, tags: DefaultTags);
         }
 
        //     Requests
@@ -240,11 +240,9 @@ namespace MetricsInfluxDb
 
         private static MetricTags ConcatMetricTags(MetricTags tags)
         {
-            if (tags.Tags != null && tags.Tags.Length > 0)
-            {
-                DEFAULT_TAGS.Tags.Concat(tags.Tags);
-            }
-            return DEFAULT_TAGS;
+            if (tags.Tags == null || tags.Tags.Length <= 0) return DefaultTags;
+            var concatTags = DefaultTags.Tags.Concat(tags.Tags);
+            return new MetricTags(concatTags.ToArray());
         }
     }
 }
