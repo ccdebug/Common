@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using org.apache.zookeeper;
 using org.apache.zookeeper.data;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 
 namespace ZkClient.Net
@@ -23,11 +24,11 @@ namespace ZkClient.Net
 
         private readonly List<IZkStateListener> _stateListener = new List<IZkStateListener>();
 
-        private readonly ConcurrentDictionary<string, HashSet<IZkChildListener>> _childListener =
-            new ConcurrentDictionary<string, HashSet<IZkChildListener>>();
+        private readonly Dictionary<string, HashSet<IZkChildListener>> _childListener =
+            new Dictionary<string, HashSet<IZkChildListener>>();
 
-        private readonly ConcurrentDictionary<string, HashSet<IZkDataListener>> _dataListener =
-            new ConcurrentDictionary<string, HashSet<IZkDataListener>>();
+        private readonly Dictionary<string, HashSet<IZkDataListener>> _dataListener =
+            new Dictionary<string, HashSet<IZkDataListener>>();
 
         public ZkClient(string zkServers, int connectionTimeout, int oprationRetryTimeout)
         {
@@ -44,6 +45,16 @@ namespace ZkClient.Net
         }
 
         #region CRUD
+
+        public async Task<string> Create(string path, string data, CreateMode mode)
+        {
+            return await RetryUntilConnected(async () => await _zk.createAsync(path, Encoding.UTF8.GetBytes(data), ZooDefs.Ids.OPEN_ACL_UNSAFE, mode));
+        }
+
+        public async Task<string> Create(string path, string data, List<ACL> acl, CreateMode mode)
+        {
+            return await RetryUntilConnected(async () => await _zk.createAsync(path, Encoding.UTF8.GetBytes(data), acl, mode));
+        }
 
         public async Task<string> GetData(string path)
         {
@@ -85,23 +96,6 @@ namespace ZkClient.Net
         public async Task<bool> ExistsAsync(string path, bool watch)
         {
             return await RetryUntilConnected(async () => await _zk.existsAsync(path, watch) != null);
-        }
-
-        public async Task<List<string>> WatchForChildren(string path)
-        {
-            return await RetryUntilConnected(async () =>
-            {
-                await ExistsAsync(path, true);
-                try
-                {
-                    return await GetChildren(path, true);
-                }
-                catch (KeeperException.NoNodeException)
-                {
-                    
-                }
-                return null;
-            });
         }
 
         #endregion
@@ -148,12 +142,12 @@ namespace ZkClient.Net
                 {
                     return await callable();
                 }
-                catch (KeeperException.ConnectionLossException e)
+                catch (KeeperException.ConnectionLossException)
                 {
                     await Task.Yield();
                     WaitForRetry();
                 }
-                catch (KeeperException.SessionExpiredException e)
+                catch (KeeperException.SessionExpiredException)
                 {
                     await Task.Yield();
                     WaitForRetry();
@@ -190,7 +184,7 @@ namespace ZkClient.Net
 
         #endregion
 
-        #region 订阅Zk事件
+        #region 订阅zookeeper事件
 
         public void SubscribeStateChange(IZkStateListener listener)
         {
@@ -218,6 +212,7 @@ namespace ZkClient.Net
                     childListeners = new HashSet<IZkChildListener>();
                 }
                 childListeners.Add(listener);
+                _childListener[path] = childListeners;
             }
             return await WatchForChildren(path);
         }
@@ -228,7 +223,66 @@ namespace ZkClient.Net
             {
                 _childListener.TryGetValue(path, out var childListeners);
                 childListeners?.Remove(listener);
+                _childListener[path] = childListeners;
             }
+        }
+
+        public async Task SubscribeDataChange(string path, IZkDataListener listener)
+        {
+            lock (this)
+            {
+                _dataListener.TryGetValue(path, out var dataListeners);
+                if (dataListeners == null)
+                {
+                    dataListeners = new HashSet<IZkDataListener>();
+                }
+                dataListeners.Add(listener);
+                _dataListener[path] = dataListeners;
+            }
+
+            await WatchForData(path);
+        }
+
+        public void UnSubscribeDataChange(string path, IZkDataListener listener)
+        {
+            lock (this)
+            {
+                _dataListener.TryGetValue(path, out var dataListeners);
+                dataListeners?.Remove(listener);
+                _dataListener[path] = dataListeners;
+            }
+        }
+
+        public void UnSubscribeAll()
+        {
+            lock (this)
+            {
+                _childListener.Clear();
+                _dataListener.Clear();
+                _stateListener.Clear();
+            }
+        }
+
+        public async Task WatchForData(string path)
+        {
+            await RetryUntilConnected(async () => await ExistsAsync(path, true));
+        }
+
+        public async Task<List<string>> WatchForChildren(string path)
+        {
+            return await RetryUntilConnected(async () =>
+            {
+                await ExistsAsync(path, true);
+                try
+                {
+                    return await GetChildren(path, true);
+                }
+                catch (KeeperException.NoNodeException)
+                {
+
+                }
+                return null;
+            });
         }
 
         #endregion
