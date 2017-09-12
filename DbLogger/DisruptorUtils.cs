@@ -11,7 +11,7 @@ namespace DbLogger
     public class DisruptorUtils : IDisposable
     {
         private const int RingBufferSize = 1024 * 1024;
-        private const int ConsumerNum = 4;     //默认4个消费者
+        private const int ConsumerNum = 5;     //默认4个消费者
         private static readonly Disruptor<LogMessageEvent> Disruptor;
         private static readonly LogMessageEventTranslator Tanslator;
 
