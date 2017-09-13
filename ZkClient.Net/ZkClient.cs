@@ -164,6 +164,19 @@ namespace ZkClient.Net
             return string.Empty;
         }
 
+        public async Task<bool> SetData(string path, string data)
+        {
+            try
+            {
+                await RetryUntilConnected(async () => await _zk.setDataAsync(path, Encoding.UTF8.GetBytes(data)));
+            }
+            catch (KeeperException e)
+            {
+                return await Task.FromResult(false);
+            }
+            return await Task.FromResult(true);
+        }
+
         public async Task<List<string>> GetChildren(string path)
         {
             var result = await RetryUntilConnected(async () => await _zk.getChildrenAsync(path, HasListeners(path)));
@@ -284,7 +297,7 @@ namespace ZkClient.Net
                     await Task.Yield();
                     WaitForRetry();
                 }
-                if (_oprationRetryTimeout > -1 && (DateTime.Now - operationStartTime).Milliseconds > _oprationRetryTimeout)
+                if (_oprationRetryTimeout > -1 && (DateTime.Now - operationStartTime).TotalMilliseconds > _oprationRetryTimeout)
                 {
                     throw new TimeoutException("Operation cannot be retried because of retry timeout(" + _oprationRetryTimeout + " milli seconds)");
                 }
@@ -549,8 +562,8 @@ namespace ZkClient.Net
                     try
                     {
                         // if the node doesn't exist we should listen for the root node to reappear
-                        await ExistsAsync(path);
-                        var children = await GetChildren(path);
+                        await ExistsAsync(path, true);
+                        var children = await GetChildren(path, true);
                         listener.HandleChildChange(path, children);
                     }
                     catch (KeeperException.NoNodeException e)

@@ -21,9 +21,9 @@ namespace ZkClient.Net.Test
             var zkOptions = new ZkOptions
             {
                 ZkServers = "114.215.169.82:12181",
-                SessionTimeout = 1000 * 5,
+                SessionTimeout = 1000 * 100,
                 ConnectionTimeout = 1000 * 5,
-                OprationRetryTimeout = 1000 * 5
+                OprationRetryTimeout = 1000 * 100
             };
             _zkClient = new ZkClient(zkOptions);
             _zkClient.SubscribeStateChange(new ZkStateListener());
@@ -37,7 +37,9 @@ namespace ZkClient.Net.Test
         {
             for (var i = 0; i < 20; i++)
             {
-                _zkClient.CreatePersistent($"/data/node{i}", i.ToString()).GetAwaiter().GetResult();
+                var path = $"/data/node{i}";
+                _zkClient.SubscribeDataChange(path, new ZkDataListener());
+                _zkClient.CreatePersistent(path, i.ToString()).GetAwaiter().GetResult();
                 var sleeping = new Random().Next(4 * 1000, 10 * 1000);
                 Debug.WriteLine(sleeping);
                 Thread.Sleep(sleeping);
@@ -65,7 +67,7 @@ namespace ZkClient.Net.Test
         {
             public void HandleStateChanged(Watcher.Event.KeeperState state)
             {
-                
+                Debug.WriteLine($"HandleStateChanged: {state.ToString()}");
             }
 
             public void HandleNewSession()
@@ -82,10 +84,12 @@ namespace ZkClient.Net.Test
         {
             public void HandleDataChange(string dataPath, string data)
             {
+                Debug.WriteLine($"data changed: {dataPath}, data: {data}");
             }
 
             public void HandleDataDeleted(string dataPath)
             {
+                Debug.WriteLine($"data delete: {dataPath}");
             }
         }
 
@@ -93,8 +97,9 @@ namespace ZkClient.Net.Test
         {
             public void HandleChildChange(string parentPath, List<string> currentChildren)
             {
-                Debug.WriteLine(parentPath);
-                Debug.WriteLine(string.Join(",", currentChildren.ToArray()));
+                Debug.WriteLine($"HandleChildChange: parentPath: {parentPath}");
+                //Debug.WriteLine(parentPath);
+                //Debug.WriteLine(string.Join(",", currentChildren.ToArray()));
                 Debug.WriteLine("--------------------------------------");
             }
         }

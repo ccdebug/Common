@@ -19,6 +19,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -310,6 +312,7 @@
     <Content Include="Content\adminlte\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\adminlte\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Home\Add.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -320,6 +323,12 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConfigCenter.Core\ConfigCenter.Core.csproj">
+      <Project>{86741c64-ae6c-4baf-ae48-c53845ec3c32}</Project>
+      <Name>ConfigCenter.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
