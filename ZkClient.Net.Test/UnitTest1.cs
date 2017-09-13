@@ -29,12 +29,12 @@ namespace ZkClient.Net.Test
             _zkClient.SubscribeStateChange(new ZkStateListener());
             _zkClient.SubscribeChildChange("/data", new ZkChildListener());
             _zkClient.SubscribeDataChange("/data", new ZkDataListener());
+            _zkClient.CreatePersistent("/data").GetAwaiter().GetResult();
         }
 
         [TestMethod]
         public void TestMethod1()
         {
-            
             for (var i = 0; i < 20; i++)
             {
                 _zkClient.CreatePersistent($"/data/node{i}", i.ToString()).GetAwaiter().GetResult();

@@ -8,6 +8,7 @@ using org.apache.zookeeper.data;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
+using log4net;
 
 namespace ZkClient.Net
 {
@@ -29,6 +30,8 @@ namespace ZkClient.Net
 
         private readonly ConcurrentDictionary<string, HashSet<IZkDataListener>> _dataListener =
             new ConcurrentDictionary<string, HashSet<IZkDataListener>>();
+
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(ZkClient));
 
         /// <inheritdoc />
         /// <summary>
@@ -56,6 +59,8 @@ namespace ZkClient.Net
             _oprationRetryTimeout = oprationRetryTimeout;
 
             _zk = Create(zkServers, sessionTimout);
+
+            Logger.Info($"ZkClient init, _zkServers: {_zkServers}, sessionTimout: {sessionTimout}, _connectionTimeout: {_connectionTimeout}");
         }
 
         private ZooKeeper Create(string connectionString, int sessionTimeout)
@@ -85,7 +90,7 @@ namespace ZkClient.Net
             }
             catch (KeeperException.NoNodeException)
             {
-                string parentDir = path.Substring(0, path.LastIndexOf("/", StringComparison.Ordinal));
+                var parentDir = path.Substring(0, path.LastIndexOf("/", StringComparison.Ordinal));
                 await CreatePersistent(parentDir, createParents, acl);
                 await CreatePersistent(path, createParents, acl);
             }
@@ -129,7 +134,14 @@ namespace ZkClient.Net
 
         public async Task<string> Create(string path, string data, List<ACL> acl, CreateMode mode)
         {
-            return await RetryUntilConnected(async () => await _zk.createAsync(path, Encoding.UTF8.GetBytes(data), acl, mode));
+            try
+            {
+                return await RetryUntilConnected(async () => await _zk.createAsync(path, Encoding.UTF8.GetBytes(data), acl, mode));
+            }
+            catch (KeeperException.NodeExistsException e)
+            {
+                return path;
+            }
         }
 
         public async Task<string> GetData(string path)
@@ -232,6 +244,9 @@ namespace ZkClient.Net
                 {
                     return false;
                 }
+
+                Logger.Info($"waitForKeeperState: {keeperState}, currentState: {_currentState}");
+
                 stillWaiting = _stateChangEvent.WaitOne(waitTimeout);
 
                 if (_currentState == Event.KeeperState.AuthFailed)
@@ -259,11 +274,13 @@ namespace ZkClient.Net
                 }
                 catch (KeeperException.ConnectionLossException)
                 {
+                    Logger.Info("ConnectionLossException, retry...");
                     await Task.Yield();
                     WaitForRetry();
                 }
                 catch (KeeperException.SessionExpiredException)
                 {
+                    Logger.Info("SessionExpiredException, retry...");
                     await Task.Yield();
                     WaitForRetry();
                 }
@@ -280,6 +297,7 @@ namespace ZkClient.Net
             {
                 WaitUntilConnected();
             }
+            
             WaitUntilConnected(TimeSpan.FromMilliseconds(_oprationRetryTimeout));
         }
 
@@ -429,6 +447,7 @@ namespace ZkClient.Net
                 // If the session expired we have to signal all conditions, because watches might have been removed and
                 // there is no guarantee that those
                 // We also have to notify all listeners that something might have changed
+                Logger.Info("session过期");
                 await FireAllEvents();
             }
 
@@ -516,7 +535,7 @@ namespace ZkClient.Net
             }
             catch (Exception e)
             {
-
+                Logger.Error($"FireDataChangedEvents exception: {e.ToString()}");
             }
         }
 
@@ -542,7 +561,7 @@ namespace ZkClient.Net
             }
             catch (Exception e)
             {
-                
+                Logger.Error($"FireChildChangedEvents exception: {e.ToString()}");
             }
         }
 
@@ -600,10 +619,12 @@ namespace ZkClient.Net
                     await _zk.closeAsync();
                 }
                 _zk = Create(_zkServers, _connectionTimeout);
+                Logger.Error("Reconnect");
             }
             catch (Exception ex)
             {
                 FireSessionEstablishmentErrorEvent(ex);
+                Logger.Error($"Reconnect exception: {ex.ToString()}");
             }
             finally
             {
@@ -628,6 +649,8 @@ namespace ZkClient.Net
                 Task.Run(async () => await _zk.closeAsync().ConfigureAwait(false))
                     .ConfigureAwait(false).GetAwaiter().GetResult();
             }
+
+            Logger.Info("Dispose");
         }
 
         #endregion
