@@ -24,19 +24,38 @@ namespace ZkClient.Net
 
         private readonly List<IZkStateListener> _stateListener = new List<IZkStateListener>();
 
-        private readonly Dictionary<string, HashSet<IZkChildListener>> _childListener =
-            new Dictionary<string, HashSet<IZkChildListener>>();
+        private readonly ConcurrentDictionary<string, HashSet<IZkChildListener>> _childListener =
+            new ConcurrentDictionary<string, HashSet<IZkChildListener>>();
 
-        private readonly Dictionary<string, HashSet<IZkDataListener>> _dataListener =
-            new Dictionary<string, HashSet<IZkDataListener>>();
+        private readonly ConcurrentDictionary<string, HashSet<IZkDataListener>> _dataListener =
+            new ConcurrentDictionary<string, HashSet<IZkDataListener>>();
 
-        public ZkClient(string zkServers, int connectionTimeout, int oprationRetryTimeout)
+        /// <inheritdoc />
+        /// <summary>
+        /// 初始化zkclient
+        /// </summary>
+        /// <param name="zkOptions"></param>
+        public ZkClient(ZkOptions zkOptions)
+            : this(zkOptions.ZkServers, zkOptions.SessionTimeout, zkOptions.ConnectionTimeout,
+                zkOptions.OprationRetryTimeout)
+        {
+           
+        }
+
+        /// <summary>
+        /// 初始化zkclient
+        /// </summary>
+        /// <param name="zkServers">zookeeper服务器地址，192.168.2.103:2181,192.168.2.104:2181,192.168.2.105:2181</param>
+        /// <param name="sessionTimout">客户端与zk服务器的session超时时间，单位毫秒</param>
+        /// <param name="connectionTimeout">连接zk服务器的超时时间，单位毫秒</param>
+        /// <param name="oprationRetryTimeout">执行操作的超时时间，单位毫秒</param>
+        public ZkClient(string zkServers, int sessionTimout, int connectionTimeout, int oprationRetryTimeout)
         {
             _zkServers = zkServers;
             _connectionTimeout = connectionTimeout;
             _oprationRetryTimeout = oprationRetryTimeout;
 
-            _zk = Create(zkServers, connectionTimeout);
+            _zk = Create(zkServers, sessionTimout);
         }
 
         private ZooKeeper Create(string connectionString, int sessionTimeout)
@@ -45,6 +64,63 @@ namespace ZkClient.Net
         }
 
         #region CRUD
+
+        public async Task CreatePersistent(string path, bool createParents = true)
+        {
+            await CreatePersistent(path, createParents, ZooDefs.Ids.OPEN_ACL_UNSAFE);
+        }
+
+        public async Task CreatePersistent(string path, bool createParents, List<ACL> acl)
+        {
+            try
+            {
+                await CreatePersistent(path, "", acl);
+            }
+            catch (KeeperException.NodeExistsException e)
+            {
+                if (!createParents)
+                {
+                    throw;
+                }
+            }
+            catch (KeeperException.NoNodeException)
+            {
+                string parentDir = path.Substring(0, path.LastIndexOf("/", StringComparison.Ordinal));
+                await CreatePersistent(parentDir, createParents, acl);
+                await CreatePersistent(path, createParents, acl);
+            }
+        }
+
+        public async Task<string> CreatePersistent(string path, string data)
+        {
+            return await Create(path, data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        }
+
+        public async Task<string> CreatePersistent(string path, string data, List<ACL> acl)
+        {
+            return await Create(path, data, acl, CreateMode.PERSISTENT);
+        }
+
+        public async Task<string> CreatePersistentSequential(string path, string data)
+        {
+            return await Create(path, data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL);
+        }
+
+        public async Task<string> CreatePersistentSequential(string path, string data, List<ACL> acl)
+        {
+            return await Create(path, data, acl, CreateMode.PERSISTENT_SEQUENTIAL);
+        }
+
+        public async Task CreateEphemeral(string path)
+        {
+            await Create(path, "", ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+        }
+
+        public async Task CreateEphemeral(string path, List<ACL> acl)
+        {
+            await Create(path, "", acl, CreateMode.EPHEMERAL);
+        }
+
 
         public async Task<string> Create(string path, string data, CreateMode mode)
         {
@@ -96,6 +172,45 @@ namespace ZkClient.Net
         public async Task<bool> ExistsAsync(string path, bool watch)
         {
             return await RetryUntilConnected(async () => await _zk.existsAsync(path, watch) != null);
+        }
+
+        public async Task<bool> DeleteRecursive(string path)
+        {
+            List<string> children;
+            try
+            {
+                children = await GetChildren(path);
+            }
+            catch (KeeperException.NoNodeException e)
+            {
+                return true;
+            }
+            foreach (var subPath in children)
+            {
+                if (!await DeleteRecursive(path + "/" + subPath))
+                {
+                    return false;
+                }
+            }
+            return await DeleteAsync(path);
+        }
+
+        public async Task<bool> DeleteAsync(string path)
+        {
+            try
+            {
+                await RetryUntilConnected(async () =>
+                {
+                    await _zk.deleteAsync(path);
+                    return await Task.FromResult(true);
+                });
+            }
+            catch (KeeperException.NoNodeException e)
+            {
+                return await Task.FromResult(false);
+            }
+
+            return await Task.FromResult(false);
         }
 
         #endregion
@@ -202,7 +317,7 @@ namespace ZkClient.Net
             }
         }
 
-        public async Task<List<string>> SubscribeChildChange(string path, IZkChildListener listener)
+        public List<string> SubscribeChildChange(string path, IZkChildListener listener)
         {
             lock (this)
             {
@@ -214,7 +329,7 @@ namespace ZkClient.Net
                 childListeners.Add(listener);
                 _childListener[path] = childListeners;
             }
-            return await WatchForChildren(path);
+            return WatchForChildren(path).GetAwaiter().GetResult();
         }
 
         public void UnSubscribeChildChange(string path, IZkChildListener listener)
@@ -227,7 +342,7 @@ namespace ZkClient.Net
             }
         }
 
-        public async Task SubscribeDataChange(string path, IZkDataListener listener)
+        public void SubscribeDataChange(string path, IZkDataListener listener)
         {
             lock (this)
             {
@@ -240,7 +355,7 @@ namespace ZkClient.Net
                 _dataListener[path] = dataListeners;
             }
 
-            await WatchForData(path);
+            WatchForData(path).GetAwaiter().GetResult();
         }
 
         public void UnSubscribeDataChange(string path, IZkDataListener listener)
@@ -332,10 +447,13 @@ namespace ZkClient.Net
 
             if (@event.getState() == Event.KeeperState.Expired)
             {
-                await Reconnect();
+                Reconnect().GetAwaiter().GetResult();
+                FireNewSessionEvent();
             }
-
+            
             _stateChangEvent.Set();
+
+            await Task.FromResult(0);
         }
 
 
@@ -482,7 +600,6 @@ namespace ZkClient.Net
                     await _zk.closeAsync();
                 }
                 _zk = Create(_zkServers, _connectionTimeout);
-                FireNewSessionEvent();
             }
             catch (Exception ex)
             {

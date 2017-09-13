@@ -13,17 +13,31 @@ namespace ZkClient.Net.Test
     [TestClass]
     public class UnitTest1
     {
+        private ZkClient _zkClient = null;
+
+        [TestInitialize]
+        public void Init()
+        {
+            var zkOptions = new ZkOptions
+            {
+                ZkServers = "114.215.169.82:12181",
+                SessionTimeout = 1000 * 5,
+                ConnectionTimeout = 1000 * 5,
+                OprationRetryTimeout = 1000 * 5
+            };
+            _zkClient = new ZkClient(zkOptions);
+            _zkClient.SubscribeStateChange(new ZkStateListener());
+            _zkClient.SubscribeChildChange("/data", new ZkChildListener());
+            _zkClient.SubscribeDataChange("/data", new ZkDataListener());
+        }
+
         [TestMethod]
         public void TestMethod1()
         {
-            ZkClient client = new ZkClient("114.215.169.82:12181", 1000 * 5, 1000 * 5);
-            client.SubscribeStateChange(new ZkStateListener());
-            client.SubscribeChildChange("/data", new ZkChildListener()).GetAwaiter().GetResult();
-            client.SubscribeDataChange("/data", new ZkDataListener()).GetAwaiter().GetResult();
-            client.Create("/data", "1111", CreateMode.PERSISTENT).GetAwaiter().GetResult();
+            
             for (var i = 0; i < 20; i++)
             {
-                client.Create($"/data/node{i}", i.ToString(), CreateMode.PERSISTENT).GetAwaiter().GetResult();
+                _zkClient.CreatePersistent($"/data/node{i}", i.ToString()).GetAwaiter().GetResult();
                 var sleeping = new Random().Next(4 * 1000, 10 * 1000);
                 Debug.WriteLine(sleeping);
                 Thread.Sleep(sleeping);
@@ -31,6 +45,20 @@ namespace ZkClient.Net.Test
             //var result = client.GetData("/data").GetAwaiter().GetResult();
             Thread.Sleep(1000 * 600);
 
+        }
+
+        [TestMethod]
+        public void TestCreate()
+        {
+            Task.Run(async () => await _zkClient.CreatePersistent("/data/node01/node001/node0001", true));
+            Thread.Sleep(1000 * 60);
+        }
+
+        [TestMethod]
+        public void TesteDelete()
+        {
+            Task.Run(async () => await _zkClient.DeleteRecursive("/data"));
+            Thread.Sleep(1000 * 60);
         }
 
         class ZkStateListener : IZkStateListener
