@@ -28,7 +28,7 @@ namespace ConfigCenter.Core
         {
             var value = Cache.Get(key);
             if (value != null) return value.ToString();
-            value = ConfZkClient.GetDataAsync(key).GetAwaiter().GetResult();
+            value = Task.Run(async () => await ConfZkClient.GetDataAsync(key)).Result;
             if (value != null)
             {
                 Set(key, value.ToString(), DateTime.Now.AddMilliseconds(DefaultExpiryMils));
