@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using log4net;
 using org.apache.zookeeper;
 using ZkClient.Net;
 
@@ -14,6 +15,7 @@ namespace ConfigCenter.Core
         private static readonly ZkClient.Net.ZkClient ZkClient;
         private static readonly ZkDataListener ZkDataListener;
         private readonly string _group;
+        
 
         public ConfZkClient(string group)
         {
@@ -89,14 +91,17 @@ namespace ConfigCenter.Core
     internal class ZkDataListener : IZkDataListener
     {
         private const int DefaultExpiryMils = 1000 * 60 * 10;
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(ConfZkClient));
 
         public void HandleDataChange(string dataPath, string data)
         {
+            Logger.Info($"更新配置：{dataPath}, data: {data}");
             ConfClient.Set(PathUtils.PathToKey2(dataPath), data, DateTime.Now.AddMilliseconds(DefaultExpiryMils));
         }
 
         public void HandleDataDeleted(string dataPath)
         {
+            Logger.Info($"删除配置：{dataPath}");
             ConfClient.Delete(PathUtils.PathToKey2(dataPath));
         }
     }

@@ -360,7 +360,8 @@ namespace ZkClient.Net
                 childListeners.Add(listener);
                 _childListener[path] = childListeners;
             }
-            return WatchForChildren(path).GetAwaiter().GetResult();
+
+            return Task.Run(async () => await WatchForChildren(path)).Result;
         }
 
         public void UnSubscribeChildChange(string path, IZkChildListener listener)
@@ -386,7 +387,7 @@ namespace ZkClient.Net
                 _dataListener[path] = dataListeners;
             }
 
-            WatchForData(path).GetAwaiter().GetResult();
+            Task.Run(async () => await WatchForData(path));
         }
 
         public void UnSubscribeDataChange(string path, IZkDataListener listener)
@@ -479,7 +480,9 @@ namespace ZkClient.Net
 
             if (@event.getState() == Event.KeeperState.Expired)
             {
-                Reconnect().GetAwaiter().GetResult();
+                Task.Run(async () => await Reconnect().ConfigureAwait(false))
+                    .ConfigureAwait(false).GetAwaiter().GetResult();
+
                 FireNewSessionEvent();
             }
             
