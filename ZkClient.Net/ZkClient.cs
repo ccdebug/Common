@@ -210,7 +210,7 @@ namespace ZkClient.Net
                 return await Task.FromResult(false);
             }
 
-            return await Task.FromResult(false);
+            return await Task.FromResult(true);
         }
 
         #endregion
