@@ -15,7 +15,7 @@ namespace ConfigCenter.Core
     public class ConfClient
     {
         private static readonly MemoryCache Cache;
-        private const int DefaultExpiryMils = 1000 * 60 * 10;
+        private const int DefaultExpiryMils = 1000 * 60 * 20;
         private static readonly ConfZkClient ConfZkClient;
 
         static ConfClient()
@@ -28,7 +28,7 @@ namespace ConfigCenter.Core
         {
             var value = Cache.Get(key);
             if (value != null) return value.ToString();
-            value = Task.Run(async () => await ConfZkClient.GetDataAsync(key)).Result;
+            value = Task.Run(async () => await ConfZkClient.GetAsync(key)).Result;
             if (value != null)
             {
                 Set(key, value.ToString(), DateTime.Now.AddMilliseconds(DefaultExpiryMils));
@@ -40,7 +40,7 @@ namespace ConfigCenter.Core
         {
             var value = Cache.Get(key);
             if (value != null) return value.ToString();
-            value = await ConfZkClient.GetDataAsync(key);
+            value = await ConfZkClient.GetAsync(key);
             if (value != null)
             {
                 Set(key, value.ToString(), DateTime.Now.AddMilliseconds(DefaultExpiryMils));

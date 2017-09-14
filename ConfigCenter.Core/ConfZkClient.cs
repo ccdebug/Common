@@ -1,11 +1,7 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using log4net;
-using org.apache.zookeeper;
 using ZkClient.Net;
 
 namespace ConfigCenter.Core
@@ -26,12 +22,13 @@ namespace ConfigCenter.Core
         {
             var zkServers = ConfigurationManager.AppSettings["config.zkservers"];
             ZkClient = new ZkClient.Net.ZkClient(new ZkOptions() {ZkServers = zkServers});
+            ZkClient.SubscribeStateChange(new ZkStateListener());
             ZkDataListener = new ZkDataListener();
         }
 
         #region CRUD
 
-        public async Task<bool> AddAsync(string key, string value)
+        public async Task<bool> CreateAsync(string key, string value)
         {
             var path = PathUtils.KeyToPath(_group, key);
             try
@@ -44,14 +41,16 @@ namespace ConfigCenter.Core
                 return await Task.FromResult(false);
             }
 
-            ZkClient.SubscribeDataChange(path, ZkDataListener);
-
             return await Task.FromResult(true);
         }
 
-        public async Task<string> GetDataAsync(string key)
+        public async Task<string> GetAsync(string key)
         {
-            return await ZkClient.GetData(PathUtils.KeyToPath(_group, key));
+            var path = PathUtils.KeyToPath(_group, key);
+
+            ZkClient.SubscribeDataChange(path, ZkDataListener);
+
+            return await ZkClient.GetData(path);
         }
 
         public async Task<bool> UpdateAsync(string key, string value)
@@ -64,6 +63,7 @@ namespace ConfigCenter.Core
             {
                 return await Task.FromResult(false);
             }
+
             return await Task.FromResult(true);
         }
 
@@ -79,58 +79,8 @@ namespace ConfigCenter.Core
                 return await Task.FromResult(false);
             }
 
-            ZkClient.UnSubscribeDataChange(path, ZkDataListener);
-
             return await Task.FromResult(true);
         }
         #endregion
     }
-
-    #region Listener
-
-    internal class ZkDataListener : IZkDataListener
-    {
-        private const int DefaultExpiryMils = 1000 * 60 * 10;
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(ConfZkClient));
-
-        public void HandleDataChange(string dataPath, string data)
-        {
-            Logger.Info($"更新配置：{dataPath}, data: {data}");
-            ConfClient.Set(PathUtils.PathToKey2(dataPath), data, DateTime.Now.AddMilliseconds(DefaultExpiryMils));
-        }
-
-        public void HandleDataDeleted(string dataPath)
-        {
-            Logger.Info($"删除配置：{dataPath}");
-            ConfClient.Delete(PathUtils.PathToKey2(dataPath));
-        }
-    }
-
-    internal class ZkStateListener : IZkStateListener
-    {
-        public void HandleStateChanged(Watcher.Event.KeeperState state)
-        {
-            
-        }
-
-        public void HandleNewSession()
-        {
-            
-        }
-
-        public void HandleSessionEstablishmentError(Exception error)
-        {
-
-        }
-    }
-
-    internal class ZkChildListener : IZkChildListener
-    {
-        public void HandleChildChange(string parentPath, List<string> currentChildren)
-        {
-            
-        }
-    }
-
-    #endregion
 }

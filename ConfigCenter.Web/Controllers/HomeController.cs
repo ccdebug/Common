@@ -25,7 +25,7 @@ namespace ConfigCenter.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Add(string group, string key, string value)
         {
-            var result = await new ConfZkClient(group).AddAsync(key, value);
+            var result = await new ConfZkClient(group).CreateAsync(key, value);
 
             return Content(result ? "success" : "failed");
         }

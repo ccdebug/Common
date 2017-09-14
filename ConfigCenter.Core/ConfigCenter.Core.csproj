@@ -52,6 +52,8 @@
     <Compile Include="ConfZkClient.cs" />
     <Compile Include="PathUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZkDataListener.cs" />
+    <Compile Include="ZkStateListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZkClient.Net\ZkClient.Net.csproj">
