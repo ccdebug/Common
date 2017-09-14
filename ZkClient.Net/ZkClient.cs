@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using log4net;
 using org.apache.zookeeper;
 using org.apache.zookeeper.data;
-using System.Linq;
-using System.Security.AccessControl;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Text;
-using log4net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ZkClient.Net
 {
@@ -635,7 +633,7 @@ namespace ZkClient.Net
                     await _zk.closeAsync();
                 }
                 _zk = Create(_zkServers, _connectionTimeout);
-                Logger.Error("Reconnect");
+                Logger.Info("Reconnect");
             }
             catch (Exception ex)
             {
