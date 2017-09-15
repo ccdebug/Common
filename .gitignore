@@ -156,3 +156,5 @@ $RECYCLE.BIN/
 .DS_Store
 /.vs
 /packages
+/.idea/.idea.Common
+/.idea/config
