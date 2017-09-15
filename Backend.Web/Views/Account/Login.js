@@ -11,7 +11,7 @@
             }
 
             abp.ui.setBusy(
-                $('#LoginForm'),
+                $('#LoginArea'),
 
                 abp.ajax({
                     contentType: 'application/x-www-form-urlencoded',
@@ -24,6 +24,12 @@
         $('#ReturnUrlHash').val(location.hash);
 
         $('#LoginForm input:first-child').focus();
+
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
 
     });
 

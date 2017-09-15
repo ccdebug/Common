@@ -6,8 +6,8 @@
 {
     @Html.IncludeScript("~/Views/Account/Login.js")
 }
-<div class="login-box-body">
-    <p class="login-box-msg">管理中心</p>
+<div id="LoginArea" class="login-box-body">
+    <p class="login-box-msg">登录管理中心</p>
 
     <form id="LoginForm" asp-action="Login" method="post">
         <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />

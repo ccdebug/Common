@@ -1,0 +1,24 @@
+﻿@model Backend.Web.Models.Layout.SideBarUserAreaViewModel
+<!-- User Account: style can be found in dropdown.less -->
+<li class="dropdown user user-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <img src="@Url.Content("~/Content/adminlte/dist/img/avatar04.png")" class="user-image" alt="User Image">
+        <span class="hidden-xs">@Model.LoginInformations.User.UserName</span>
+    </a>
+    <ul class="dropdown-menu">
+        <!-- User image -->
+        <li class="user-header">
+            <img src="@Url.Content("~/Content/adminlte/dist/img/avatar04.png")" class="img-circle" alt="User Image">
+            <p>@Html.Raw(Model.GetShownLoginName()) - Web Developer</p>
+        </li>
+        <!-- Menu Footer-->
+        <li class="user-footer">
+            <div class="pull-left">
+                <a href="#" class="btn btn-default btn-flat">资 料</a>
+            </div>
+            <div class="pull-right">
+                <a href="@Url.Action("Logout", "Account")" class="btn btn-default btn-flat">注 销</a>
+            </div>
+        </li>
+    </ul>
+</li>

@@ -22,6 +22,8 @@ namespace Backend.Web
         public override void PreInitialize()
         {
             Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
+
+            Configuration.Navigation.Providers.Add<BackendNavigationProvider>();
         }
 
         public override void Initialize()

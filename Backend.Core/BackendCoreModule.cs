@@ -4,6 +4,7 @@ using Abp.Localization.Dictionaries.Xml;
 using Abp.Modules;
 using Abp.Zero;
 using Abp.Zero.Configuration;
+using Backend.Core.Authorization;
 using Backend.Core.Authorization.Roles;
 using Backend.Core.Authorization.Users;
 using Backend.Core.Configuration;
@@ -32,6 +33,8 @@ namespace Backend.Core
                     )
                 )
             );
+
+            Configuration.Authorization.Providers.Add<BackendAuthorizationProvider>();
 
             //Configuration.Settings.Providers.Add<AppSettingProvider>();
         }
