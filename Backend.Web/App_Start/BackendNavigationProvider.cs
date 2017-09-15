@@ -14,7 +14,7 @@ namespace Backend.Web
                     new MenuItemDefinition(
                             PageNames.DisConfManager, 
                             L("DisConfManager"),
-                            "fa fa-th", "",
+                            "fa fa-cog", "",
                             true,
                             requiredPermissionName: PermissionNames.Pages_DisConf
                         )
@@ -22,7 +22,7 @@ namespace Backend.Web
                             new MenuItemDefinition(
                                 "DisConfList",
                                 L("DisConfList"),
-                                "fa fa-circle-o",
+                                "fa fa-list-ul",
                                 "/DisConfig/List",
                                 true,
                                 requiredPermissionName: PermissionNames.Pages_DisConf
@@ -32,7 +32,7 @@ namespace Backend.Web
                             new MenuItemDefinition(
                                 "DisConfGroup",
                                 L("DisConfGroup"),
-                                "fa fa-circle-o",
+                                "fa fa-list-ul",
                                 "/DisConfig/Group",
                                 requiredPermissionName: PermissionNames.Pages_DisConf_Group
                             )
