@@ -105,6 +105,8 @@
     <Compile Include="Authorization\Users\UserStore.cs" />
     <Compile Include="BackendConsts.cs" />
     <Compile Include="BackendCoreModule.cs" />
+    <Compile Include="Configuration\AppSettingNames.cs" />
+    <Compile Include="Configuration\AppSettingProvider.cs" />
     <Compile Include="Editions\EditionManager.cs" />
     <Compile Include="Features\FeatureValueStore.cs" />
     <Compile Include="MultiTenancy\Tenant.cs" />
@@ -114,7 +116,10 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Source\Backend-zh-CN.xml" />
+    <EmbeddedResource Include="Localization\Source\Backend.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

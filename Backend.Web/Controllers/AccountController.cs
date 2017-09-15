@@ -52,7 +52,7 @@ namespace Backend.Web.Controllers
 
             ViewBag.IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled;
 
-            return View();
+            return View(new LoginFormViewModel() { ReturnUrl = returnUrl});
         }
 
         [DisableAuditing]
@@ -107,7 +107,8 @@ namespace Backend.Web.Controllers
             }
         }
 
-        private Exception CreateExceptionForFailedLoginAttempt(AbpLoginResultType result, string usernameOrEmailAddress, string tenancyName)
+        private Exception CreateExceptionForFailedLoginAttempt(AbpLoginResultType result, 
+            string usernameOrEmailAddress, string tenancyName)
         {
             switch (result)
             {
@@ -130,6 +131,12 @@ namespace Backend.Web.Controllers
                     Logger.Warn("Unhandled login fail reason: " + result);
                     return new UserFriendlyException(L("LoginFailed"));
             }
+        }
+
+        public ActionResult Logout()
+        {
+            _authenticationManager.SignOut();
+            return RedirectToAction("Login");
         }
 
         #endregion
