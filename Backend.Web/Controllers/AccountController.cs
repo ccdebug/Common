@@ -52,7 +52,7 @@ namespace Backend.Web.Controllers
 
             ViewBag.IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled;
 
-            return View();
+            return View(new LoginFormViewModel() { ReturnUrl = returnUrl});
         }
 
         [DisableAuditing]

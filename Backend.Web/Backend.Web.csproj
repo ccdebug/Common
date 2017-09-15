@@ -691,6 +691,49 @@
     <Content Include="lib\spin.js\jquery.spin.js" />
     <Content Include="lib\spin.js\spin.js" />
     <Content Include="lib\spin.js\spin.min.js" />
+    <Content Include="lib\sweetalert\.gitignore" />
+    <Content Include="lib\sweetalert\dev\gulpfile-wrap-template.js" />
+    <Content Include="lib\sweetalert\dev\ie9.css" />
+    <Content Include="lib\sweetalert\dev\loader-animation.css" />
+    <Content Include="lib\sweetalert\dev\modules\default-params.js" />
+    <Content Include="lib\sweetalert\dev\modules\handle-click.js" />
+    <Content Include="lib\sweetalert\dev\modules\handle-dom.js" />
+    <Content Include="lib\sweetalert\dev\modules\handle-key.js" />
+    <Content Include="lib\sweetalert\dev\modules\handle-swal-dom.js" />
+    <Content Include="lib\sweetalert\dev\modules\injected-html.js" />
+    <Content Include="lib\sweetalert\dev\modules\set-params.js" />
+    <Content Include="lib\sweetalert\dev\modules\utils.js" />
+    <Content Include="lib\sweetalert\dev\sweetalert.es6.js" />
+    <Content Include="lib\sweetalert\dist\sweetalert-dev.js" />
+    <Content Include="lib\sweetalert\dist\sweetalert.css" />
+    <Content Include="lib\sweetalert\dist\sweetalert.min.js" />
+    <Content Include="lib\sweetalert\example\example.css" />
+    <Content Include="lib\sweetalert\example\images\logo_big%402x.png" />
+    <Content Include="lib\sweetalert\example\images\logo_big.png" />
+    <Content Include="lib\sweetalert\example\images\logo_small%402x.png" />
+    <Content Include="lib\sweetalert\example\images\logo_small.png" />
+    <Content Include="lib\sweetalert\example\images\te-logo-small.svg" />
+    <Content Include="lib\sweetalert\example\images\thumbs-up.jpg" />
+    <Content Include="lib\sweetalert\example\images\vs_icon%402x.png" />
+    <Content Include="lib\sweetalert\example\images\vs_icon.png" />
+    <Content Include="lib\sweetalert\gulpfile.js" />
+    <Content Include="lib\sweetalert\index.html" />
+    <Content Include="lib\sweetalert\lib\modules\default-params.js" />
+    <Content Include="lib\sweetalert\lib\modules\handle-click.js" />
+    <Content Include="lib\sweetalert\lib\modules\handle-dom.js" />
+    <Content Include="lib\sweetalert\lib\modules\handle-key.js" />
+    <Content Include="lib\sweetalert\lib\modules\handle-swal-dom.js" />
+    <Content Include="lib\sweetalert\lib\modules\injected-html.js" />
+    <Content Include="lib\sweetalert\lib\modules\set-params.js" />
+    <Content Include="lib\sweetalert\lib\modules\utils.js" />
+    <Content Include="lib\sweetalert\lib\sweetalert.js" />
+    <Content Include="lib\sweetalert\sweetalert.gif" />
+    <Content Include="lib\sweetalert\test\index.html" />
+    <Content Include="lib\sweetalert\test\tests.js" />
+    <Content Include="lib\sweetalert\themes\facebook\facebook.css" />
+    <Content Include="lib\sweetalert\themes\google\google.css" />
+    <Content Include="lib\sweetalert\themes\twitter\twitter.css" />
+    <Content Include="Views\Account\Login.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -707,6 +750,7 @@
     <Compile Include="Models\Account\LoginFormViewModel.cs" />
     <Compile Include="Models\Account\LoginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\BackendWebViewPageBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -857,13 +901,27 @@
     <Content Include="lib\jquery-validation\package.json" />
     <Content Include="lib\jquery-validation\README.md" />
     <Content Include="lib\jquery-validation\validation.jquery.json" />
+    <Content Include="lib\sweetalert\.bower.json" />
+    <Content Include="lib\sweetalert\.editorconfig" />
+    <Content Include="lib\sweetalert\.jshintrc" />
+    <Content Include="lib\sweetalert\.travis.yml" />
+    <Content Include="lib\sweetalert\bower.json" />
+    <Content Include="lib\sweetalert\dev\sweetalert.scss" />
+    <Content Include="lib\sweetalert\example\example.scss" />
+    <Content Include="lib\sweetalert\LICENSE" />
+    <Content Include="lib\sweetalert\package.json" />
+    <Content Include="lib\sweetalert\README.md" />
+    <Content Include="lib\sweetalert\themes\facebook\facebook.scss" />
+    <Content Include="lib\sweetalert\themes\google\google.scss" />
+    <Content Include="lib\sweetalert\themes\twitter\twitter.scss" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Account\Login.css" />
+    <Content Include="Views\Account\_Layout.cshtml" />
+    <Content Include="Views\Account\_ViewStart.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

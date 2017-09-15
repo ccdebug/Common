@@ -1,121 +1,40 @@
 ﻿@using System.Web.Optimization
 @using Abp.Web.Mvc.Extensions
 @model Backend.Web.Models.Account.LoginFormViewModel
-
-@{
-    Layout = null;
-}
-@section Styles
-{
-    @Html.IncludeStyle("~/Views/Account/Login.less")
-}
+    
 @section Scripts
 {
     @Html.IncludeScript("~/Views/Account/Login.js")
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Backend | Log in</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet" href="@Url.Content("~/Content/adminlte/bootstrap/css/bootstrap.min.css")">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="@Url.Content("~/Content/adminlte/plugins/font-awesome/font-awesome.min.css")">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="@Url.Content("~/Content/adminlte/plugins/ionicons/ionicons.min.css")">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="@Url.Content("~/Content/adminlte/dist/css/AdminLTE.min.css")">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="@Url.Content("~/Content/adminlte/plugins/iCheck/square/blue.css")">
+<div class="login-box-body">
+    <p class="login-box-msg">管理中心</p>
 
-    <link rel="stylesheet" href="@Url.Content("~/Views/Account/Login.css")">
-
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="@Url.Content("~/Content/adminlte/plugins/html5shiv/html5shiv.min.js")"></script>
-    <script src="@Url.Content("~/Content/adminlte/plugins/respond/respond.min.js")"></script>
-    <![endif]-->
-</head>
-<body class="hold-transition login-page">
-    <div class="login-box">
-        <div class="login-logo">
-            <a href="../../index2.html"><b>Backend</b></a>
+    <form id="LoginForm" asp-action="Login" method="post">
+        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        <input type="hidden" name="returnUrlHash" />
+        <div class="form-group has-feedback">
+            <input type="text" class="form-control" name="Username" placeholder="Username" required autofocus maxlength="100">
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
-        <!-- /.login-logo -->
-        <div class="login-box-body">
-            <p class="login-box-msg">管理中心</p>
-
-            <form id="LoginForm" action="Login" method="post">
-                <div class="form-group has-feedback">
-                    <input type="text" class="form-control" name="Username" placeholder="Username" required autofocus maxlength="100">
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                </div>
-                <div class="form-group has-feedback">
-                    <input type="password" class="form-control" name="Password" placeholder="Password" required maxlength="100">
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                </div>
-                <div class="row">
-                    <div class="col-xs-8">
-                        <div class="checkbox icheck">
-                            <label>
-                                <input type="checkbox" name="RememberMe"> 记住我
-                            </label>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">登 录</button>
-                    </div>
-                    <!-- /.col -->
-                </div>
-            </form>
+        <div class="form-group has-feedback">
+            <input type="password" class="form-control" name="Password" placeholder="Password" required maxlength="100">
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
-        <!-- /.login-box-body -->
-    </div>
-    <!-- /.login-box -->
-    <!-- jQuery 2.2.3 -->
-    <script src="@Url.Content("~/Content/adminlte/plugins/jQuery/jquery-2.2.3.min.js")"></script>
-    <!-- Bootstrap 3.3.6 -->
-    <script src="@Url.Content("~/Content/adminlte/bootstrap/js/bootstrap.min.js")"></script>
-    <!-- iCheck -->
-    <script src="@Url.Content("~/Content/adminlte/plugins/iCheck/icheck.min.js")"></script>
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="checkbox icheck">
+                    <label>
+                        <input type="checkbox" name="RememberMe"> 记住我
+                    </label>
+                </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">登 录</button>
+            </div>
+            <!-- /.col -->
+        </div>
+    </form>
+</div>
 
-    @Scripts.Render("~/Bundles/account-vendor/js/bottom")
-
-    <script>
-        $(function () {
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
-            });
-
-            var $loginForm = $('#LoginForm');
-
-            $loginForm.submit(function () {
-
-                if (!$loginForm.valid()) {
-                    return;
-                }
-
-                abp.ui.setBusy(
-                    $('#LoginArea'),
-
-                    abp.ajax({
-                        contentType: 'application/x-www-form-urlencoded',
-                        url: $loginForm.attr('action'),
-                        data: $loginForm.serialize()
-                    })
-                );
-            });
-        });
-    </script>
-</body>
-</html>
 

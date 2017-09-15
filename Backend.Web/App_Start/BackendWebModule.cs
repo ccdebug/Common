@@ -5,6 +5,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Abp.Modules;
 using Abp.Web.Mvc;
+using Abp.Zero.Configuration;
 using Backend.Application;
 using Backend.Entityframwork;
 using Castle.MicroKernel.Registration;
@@ -18,6 +19,11 @@ namespace Backend.Web
         typeof(AbpWebMvcModule))]
     public class BackendWebModule : AbpModule
     {
+        public override void PreInitialize()
+        {
+            Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
+        }
+
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());

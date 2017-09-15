@@ -14,12 +14,14 @@ namespace Backend.Web
                         "~/lib/json2/json2.js",
                         "~/lib/jquery-validation/dist/jquery.validate.js",
                         "~/lib/blockUI/jquery.blockUI.js",
+                        "~/lib/sweetalert/dist/sweetalert.min.js",
                         "~/lib/spin.js/spin.js",
                         "~/lib/spin.js/jquery.spin.js",
                         "~/lib/abp-web-resources/Abp/Framework/scripts/abp.js",
                         "~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
                         "~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js",
-                        "~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js"
+                        "~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
+                        "~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js"
                     )
             );
         }
