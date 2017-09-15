@@ -793,6 +793,7 @@
     <Content Include="lib\abp-web-resources\bower.json" />
     <Content Include="lib\abp-web-resources\LICENSE" />
     <Content Include="lib\abp-web-resources\package.json" />
+    <Content Include="Content\adminlte\plugins\fonts\fontawesome-webfont.woff2" />
     <None Include="lib\abp-web-resources\packages.config" />
     <Content Include="lib\abp-web-resources\README.md" />
     <Content Include="lib\bootstrap\.bower.json" />

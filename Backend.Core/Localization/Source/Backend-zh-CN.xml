@@ -55,5 +55,10 @@
     <text name="Yes" value="是" />
     <text name="No" value="否" />
     <text name="Optional" value="可选的" />
+    
+    <text name="DisConfManager" value="配置管理" />
+    <text name="DisConfList" value="配置列表" />
+    <text name="DisConfGroup" value="配置分组" />
+    
   </texts>
 </localizationDictionary>
