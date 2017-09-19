@@ -12,43 +12,41 @@ namespace Backend.Web
             context.Manager.MainMenu
                 .AddItem(
                     new MenuItemDefinition(
-                        "System",
-                        L("System"),
-                        "fa fa-wrench",
-                        "/System"
+                        PageNames.Backend.Common.Administration,
+                        L("Administration"),
+                        "fa fa-wrench"
                     ).AddItem(
                         new MenuItemDefinition(
-                            "Users",
+                            PageNames.Backend.Common.Users,
                             L("Users"),
                             "fa fa-users",
                             "/Users",
-                            requiredPermissionName: PermissionNames.Pages_Users
+                            requiredPermissionName: AppPermissions.Pages_Administration_Users
                         )
                     )
                 )
                 .AddItem(
                     new MenuItemDefinition(
-                            PageNames.DisConfManager,
+                            PageNames.Backend.DisConf.DisConfManager,
                             L("DisConfManager"),
-                            "fa fa-cog", "",
-                            requiredPermissionName: PermissionNames.Pages_DisConf
+                            "fa fa-cog"
                         )
                         .AddItem(
                             new MenuItemDefinition(
-                                "DisConfList",
+                                PageNames.Backend.DisConf.DisConfManager,
                                 L("DisConfList"),
                                 "fa fa-list-ul",
                                 "/DisConfig/List",
-                                requiredPermissionName: PermissionNames.Pages_DisConf
+                                requiredPermissionName: AppPermissions.Pages_DisConf
                             )
                         )
                         .AddItem(
                             new MenuItemDefinition(
-                                "DisConfGroup",
+                                PageNames.Backend.DisConf.DisConfGroup,
                                 L("DisConfGroup"),
                                 "fa fa-list-ul",
                                 "/DisConfig/Group",
-                                requiredPermissionName: PermissionNames.Pages_DisConf_Group
+                                requiredPermissionName: AppPermissions.Pages_DisConf_Group
                             )
                         )
                 );

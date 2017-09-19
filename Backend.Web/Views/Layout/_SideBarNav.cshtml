@@ -23,7 +23,7 @@
     <li class="header">常用模块</li>
     @foreach (var menuItem in Model.UserMenu.Items)
     {
-        <li class="@(Model.ActiveMenuItemName == menuItem.Name ? "active" : "") treeview">
+        <li class="@(Model.ActiveMenuItemName.Contains(menuItem.Name) ? "active" : "") treeview">
             @if (menuItem.Items.IsNullOrEmpty())
             {
                 <a href="@caculateMenuUrl(menuItem.Url)">
@@ -44,7 +44,7 @@
                 <ul class="treeview-menu">
                     @foreach (var subMenuItem in menuItem.Items)
                     {
-                        <li><a href="@caculateMenuUrl(subMenuItem.Url)"><i class="@subMenuItem.Icon"></i> @subMenuItem.DisplayName</a></li>
+                        <li class="@(Model.ActiveMenuItemName == subMenuItem.Name ? "active" : "")"><a href="@caculateMenuUrl(subMenuItem.Url)"><i class="@subMenuItem.Icon"></i> @subMenuItem.DisplayName</a></li>
                     }
                 </ul>
             }

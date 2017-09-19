@@ -60,8 +60,8 @@
     <text name="DisConfList" value="配置列表" />
     <text name="DisConfGroup" value="配置分组" />
 
-    <text name="System" value="系统管理" />
-    <text name="Uses" value="用户管理" />
+    <text name="Administration" value="系统管理" />
+    <text name="Roles" value="角色" />
     
   </texts>
 </localizationDictionary>

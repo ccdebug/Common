@@ -95,7 +95,7 @@
     <Compile Include="Authorization\BackendAuthorizationProvider.cs" />
     <Compile Include="Authorization\LogInManager.cs" />
     <Compile Include="Authorization\PermissionChecker.cs" />
-    <Compile Include="Authorization\PermissionNames.cs" />
+    <Compile Include="Authorization\AppPermissions.cs" />
     <Compile Include="Authorization\Roles\Role.cs" />
     <Compile Include="Authorization\Roles\RoleManager.cs" />
     <Compile Include="Authorization\Roles\RoleStore.cs" />

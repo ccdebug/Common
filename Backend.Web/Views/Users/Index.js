@@ -123,7 +123,7 @@
 
         function format(date) {
             if (date) {
-                return moment().locale("zh_CN").format("L");
+                return moment().format("L");
             }
             return '-';
         }
