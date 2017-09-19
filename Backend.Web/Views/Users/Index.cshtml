@@ -1,0 +1,80 @@
+﻿@using Abp.Web.Mvc.Extensions
+
+@{
+    ViewBag.Title = "Index";
+}
+@section Styles
+{
+    @Html.IncludeStyle("~/Content/adminlte/plugins/datatables/dataTables.bootstrap.css")
+}
+@section Scripts
+{
+    @Html.IncludeScript("~/Content/adminlte/plugins/datatables/jquery.dataTables.min.js")
+    @Html.IncludeScript("~/Content/adminlte/plugins/datatables/dataTables.bootstrap.min.js")
+    @Html.IncludeScript("~/Views/Users/Index.js")
+}
+<section class="content-header">
+    <h1>
+        用户
+        <small>管理用户及权限</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-users"></i> 系统管理</a></li>
+        <li class="active">用户管理</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box">
+        <!-- search form -->
+        <form action="#" method="post" class="form-horizontal">
+            <div class="input-group">
+                <input type="text" name="Filter" id="FilterText" class="form-control" placeholder="Search...">
+                <span class="input-group-btn">
+                    <button type="submit" name="search" id="SearchButton" class="btn btn-flat">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+    </div>
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+            </h3>
+            <div class="box-tools pull-right">
+                <form class="form-horizontal">
+                    <div class="col-md-5">
+                        <select id="SelectRole" class="form-control box-input">
+                            <option>Admin</option>
+                            <option>User</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button id="AndvanceSearchButton" class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-default"><i class="fa fa-plus"></i> 新增用户</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="box-body">
+            <table id="ConfTable" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>角色</th>
+                    <th>邮箱地址</th>
+                    <th>邮箱地址确认</th>
+                    <th>激活</th>
+                    <th>上次登录时间</th>
+                    <th>创建时间</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <!-- /.box -->
+</section>
+

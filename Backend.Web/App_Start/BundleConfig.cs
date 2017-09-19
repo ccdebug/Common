@@ -17,6 +17,7 @@ namespace Backend.Web
                         "~/lib/sweetalert/dist/sweetalert.min.js",
                         "~/lib/spin.js/spin.js",
                         "~/lib/spin.js/jquery.spin.js",
+                        "~/lib/moment/moment-with-locales.min.js",
                         "~/lib/abp-web-resources/Abp/Framework/scripts/abp.js",
                         "~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
                         "~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js",

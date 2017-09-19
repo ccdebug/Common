@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Abp.Configuration.Startup;
 using Abp.Modules;
 using Abp.Web.Mvc;
 using Abp.Zero.Configuration;
@@ -24,6 +25,8 @@ namespace Backend.Web
             Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
 
             Configuration.Navigation.Providers.Add<BackendNavigationProvider>();
+
+            Configuration.Modules.AbpWeb().AntiForgery.IsEnabled = false;
         }
 
         public override void Initialize()

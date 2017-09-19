@@ -59,6 +59,9 @@
     <text name="DisConfManager" value="配置管理" />
     <text name="DisConfList" value="配置列表" />
     <text name="DisConfGroup" value="配置分组" />
+
+    <text name="System" value="系统管理" />
+    <text name="Uses" value="用户管理" />
     
   </texts>
 </localizationDictionary>

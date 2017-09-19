@@ -5,7 +5,7 @@ using Backend.Core;
 
 namespace Backend.Application
 {
-    [DependsOn(typeof(BackendCoreModule), typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(BackendCoreModule), typeof(AbpAutoMapperModule), typeof(AbpAutoMapperModule))]
     public class BackendApplicationModule : AbpModule
     {
         public override void PreInitialize()

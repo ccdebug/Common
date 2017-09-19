@@ -12,10 +12,25 @@ namespace Backend.Web
             context.Manager.MainMenu
                 .AddItem(
                     new MenuItemDefinition(
-                            PageNames.DisConfManager, 
+                        "System",
+                        L("System"),
+                        "fa fa-wrench",
+                        "/System"
+                    ).AddItem(
+                        new MenuItemDefinition(
+                            "Users",
+                            L("Users"),
+                            "fa fa-users",
+                            "/Users",
+                            requiredPermissionName: PermissionNames.Pages_Users
+                        )
+                    )
+                )
+                .AddItem(
+                    new MenuItemDefinition(
+                            PageNames.DisConfManager,
                             L("DisConfManager"),
                             "fa fa-cog", "",
-                            true,
                             requiredPermissionName: PermissionNames.Pages_DisConf
                         )
                         .AddItem(
@@ -24,7 +39,6 @@ namespace Backend.Web
                                 L("DisConfList"),
                                 "fa fa-list-ul",
                                 "/DisConfig/List",
-                                true,
                                 requiredPermissionName: PermissionNames.Pages_DisConf
                             )
                         )
