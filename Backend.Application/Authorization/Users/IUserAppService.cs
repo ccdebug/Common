@@ -8,5 +8,9 @@ namespace Backend.Application.Authorization.Users
     public interface IUserAppService : IApplicationService
     {
         Task<PagedResultDto<UserListDto>> GetUsers(GetUsersInput input);
+
+        Task<GetUserForEditOutput> GetUserForEdit(NullableIdDto<long> input);
+
+        Task CreateOrUpdateUser(CreateOrUpdateUserInput input);
     }
 }

@@ -104,12 +104,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authorization\Users\Dto\CreateOrUpdateUserInput.cs" />
+    <Compile Include="Authorization\Users\Dto\GetUserForEditOutput.cs" />
     <Compile Include="Authorization\Users\Dto\GetUsersInput.cs" />
+    <Compile Include="Authorization\Users\Dto\UserEditDto.cs" />
     <Compile Include="Authorization\Users\Dto\UserListDto.cs" />
+    <Compile Include="Authorization\Users\Dto\UserRoleDto.cs" />
     <Compile Include="Authorization\Users\IUserAppService.cs" />
     <Compile Include="Authorization\Users\UserAppService.cs" />
     <Compile Include="BackendApplicationModule.cs" />
     <Compile Include="BackendAppServiceBase.cs" />
+    <Compile Include="CustomeDtoMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\Dto\GetCurrentLoginInfomationsOutput.cs" />
     <Compile Include="Session\Dto\TenantLoginInfoDto.cs" />

@@ -1,6 +1,8 @@
 ﻿@using System.Threading
 @using System.Web.Optimization
 @using Abp.Timing
+@using Abp.Web.Mvc.Extensions
+@using Backend.Web.Bundling
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -23,6 +25,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="@Url.Content("~/Content/adminlte/plugins/respond/respond.min.js")"></script>
     <![endif]-->
     @RenderSection("Styles", false)
+    <script type="text/javascript">
+        @* This is used to get the application's root path from javascript.
+        It's useful if you're running application in a virtual directory under IIS. *@
+        var abp = abp || {}; abp.appPath = '@ApplicationPath';
+    </script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
@@ -55,7 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <section class="sidebar">
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel">
-                    
+
                 </div>
                 <!-- search form (Optional) -->
                 <form action="#" method="get" class="sidebar-form">
@@ -69,7 +76,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>
                 </form>
                 <!-- /.search form -->
-               @Html.Action("SideBarNav", "Layout", new { activeMenu = ViewBag.CurrentPageName })
+                @Html.Action("SideBarNav", "Layout", new { activeMenu = ViewBag.CurrentPageName })
             </section>
             <!-- /.sidebar -->
         </aside>
@@ -159,21 +166,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
              immediately after the control sidebar -->
         <div class="control-sidebar-bg"></div>
     </div>
-<!-- ./wrapper -->
+    <!-- ./wrapper -->
 
     @Scripts.Render("~/Bundles/vendor/js/bottom")
-    
+
+    @Scripts.Render("~/Bundles/Common/js")
+
+    @Html.IncludeScript(ScriptPaths.JQuery_Validation_Localization)
+
     <script>
         abp.localization.defaultSourceName = '@LocalizationSourceName';
         moment.locale('@Thread.CurrentThread.CurrentUICulture.Name'); //Localizing moment.js
     </script>
-    
+
     <script src="~/AbpScripts/GetScripts?v=@(Clock.Now.Ticks)" type="text/javascript"></script>
 
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-         Both of these plugins are recommended to enhance the
-         user experience. Slimscroll is required when using the
-         fixed layout. -->
+    <!-- Optionally, you can add Slimscroll and FastClick plugins.
+             Both of these plugins are recommended to enhance the
+             user experience. Slimscroll is required when using the
+             fixed layout. -->
     @RenderSection("Scripts", false)
 </body>
 </html>

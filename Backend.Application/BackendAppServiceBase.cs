@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.IdentityFramework;
 using Abp.Runtime.Session;
 using Backend.Core;
 using Backend.Core.Authorization.Users;
 using Backend.Core.MultiTenancy;
+using Microsoft.AspNet.Identity;
 
 namespace Backend.Application
 {
@@ -34,6 +36,11 @@ namespace Backend.Application
         protected virtual Task<Tenant> GetCurrentTenantAsync()
         {
             return TenantManager.FindByIdAsync(AbpSession.GetTenantId());
+        }
+
+        protected virtual void CheckErrors(IdentityResult identityResult)
+        {
+            identityResult.CheckErrors(LocalizationManager);
         }
     }
 }

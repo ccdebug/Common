@@ -10,6 +10,8 @@ using Backend.Application.Authorization.Users.Dto;
 using Backend.Core.Authorization.Users;
 using Abp.Linq.Extensions;
 using System.Linq;
+using Abp.Zero.Configuration;
+using Abp.Configuration;
 using Backend.Core.Authorization.Roles;
 
 namespace Backend.Application.Authorization.Users
@@ -47,6 +49,60 @@ namespace Backend.Application.Authorization.Users
             await FillRoleNames(userListDtos);
 
             return new PagedResultDto<UserListDto>(userCount, userListDtos);
+        }
+
+        public async Task<GetUserForEditOutput> GetUserForEdit(NullableIdDto<long> input)
+        {
+            var userRoleDtos = (await _roleManager.Roles
+                .OrderBy(r => r.DisplayName)
+                .Select(r => new UserRoleDto()
+                {
+                    RoleId = r.Id,
+                    RoleName = r.Name,
+                    RoleDisplayName = r.DisplayName
+                })
+                .ToArrayAsync());
+
+            var output = new GetUserForEditOutput
+            {
+                Roles = userRoleDtos
+            };
+
+            if (!input.Id.HasValue)
+            {
+                //create
+                output.User = new UserEditDto
+                {
+                    IsActive = true,
+                    ShouldChangePasswordOnNextLogin = true,
+                    IsLockoutEnabled = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.UserLockOut.IsEnabled)
+                };
+
+                foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
+                {
+                    var defaultUserRole = userRoleDtos.FirstOrDefault(ur => ur.RoleName == defaultRole.Name);
+                    if (defaultUserRole != null)
+                    {
+                        defaultUserRole.IsAssigned = true;
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        public async Task CreateOrUpdateUser(CreateOrUpdateUserInput input)
+        {
+            if (!input.User.Id.HasValue)
+            {
+                //update
+            }
+            else
+            {
+                //insert
+
+            }
+            await Task.FromResult(0);
         }
 
         private async Task FillRoleNames(List<UserListDto> userListDtos)

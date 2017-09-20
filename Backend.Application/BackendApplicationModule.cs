@@ -10,6 +10,10 @@ namespace Backend.Application
     {
         public override void PreInitialize()
         {
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(mapper =>
+            {
+                CustomeDtoMapper.CreateMappings(mapper);
+            });
         }
 
         public override void Initialize()
