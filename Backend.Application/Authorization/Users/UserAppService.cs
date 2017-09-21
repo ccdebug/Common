@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq.Dynamic;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
@@ -10,9 +12,13 @@ using Backend.Application.Authorization.Users.Dto;
 using Backend.Core.Authorization.Users;
 using Abp.Linq.Extensions;
 using System.Linq;
+using Abp.Authorization;
+using Abp.Authorization.Users;
 using Abp.Zero.Configuration;
 using Abp.Configuration;
+using Backend.Core.Authorization;
 using Backend.Core.Authorization.Roles;
+using Microsoft.AspNet.Identity;
 
 namespace Backend.Application.Authorization.Users
 {
@@ -51,6 +57,7 @@ namespace Backend.Application.Authorization.Users
             return new PagedResultDto<UserListDto>(userCount, userListDtos);
         }
 
+        [AbpAuthorize(AppPermissions.Pages_Administration_Users_Create, AppPermissions.Pages_Administration_Users_Edit)]
         public async Task<GetUserForEditOutput> GetUserForEdit(NullableIdDto<long> input)
         {
             var userRoleDtos = (await _roleManager.Roles
@@ -87,6 +94,18 @@ namespace Backend.Application.Authorization.Users
                     }
                 }
             }
+            else
+            {
+                //edit
+                var user = await UserManager.GetUserByIdAsync(input.Id.Value);
+
+                output.User = user.MapTo<UserEditDto>();
+
+                foreach (var userRoleDto in userRoleDtos)
+                {
+                    userRoleDto.IsAssigned = await UserManager.IsInRoleAsync(user.Id, userRoleDto.RoleName);
+                }
+            }
 
             return output;
         }
@@ -95,14 +114,75 @@ namespace Backend.Application.Authorization.Users
         {
             if (!input.User.Id.HasValue)
             {
-                //update
+                //insert
+                await CreateUserAsync(input);
             }
             else
             {
-                //insert
-
+                //update
+                await UpdateUserAsync(input);
             }
-            await Task.FromResult(0);
+        }
+
+        protected virtual async Task CreateUserAsync(CreateOrUpdateUserInput input)
+        {
+            var user = input.User.MapTo<User>();
+            user.TenantId = AbpSession.TenantId;
+
+            //设置密码
+            if (!input.User.Password.IsNullOrEmpty())
+            {
+                CheckErrors(await UserManager.PasswordValidator.ValidateAsync(input.User.Password));
+            }
+            else
+            {
+                input.User.Password = User.CreateDefaultPassword();
+            }
+
+            user.Password = new PasswordHasher().HashPassword(input.User.Password);
+            user.ShouldChangePasswordOnNextLogin = input.User.ShouldChangePasswordOnNextLogin;
+
+            //设置角色
+            user.Roles = new Collection<UserRole>();
+            foreach (var roleName in input.AssignedRoleNames)
+            {
+                var role = await _roleManager.GetRoleByNameAsync(roleName);
+                user.Roles.Add(new UserRole(AbpSession.TenantId, user.Id, role.Id));
+            }
+
+            CheckErrors(await _userManager.CreateAsync(user));
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            //发送激活邮件
+            //if (input.SendActivationEmail)
+            //{
+            //    user.SetNewEmailConfirmationCode();
+
+            //}
+        }
+
+        protected virtual async Task UpdateUserAsync(CreateOrUpdateUserInput input)
+        {
+            Debug.Assert(input.User.Id != null, "input.User.Id != null");
+
+            var user = await UserManager.FindByIdAsync(input.User.Id.Value);
+            //更新用户信息
+            input.User.MapTo(user);
+
+            if (input.SetRandomPassword)
+            {
+                input.User.Password = User.CreateRandomPassword();
+            }
+
+            if (!input.User.Password.IsNullOrEmpty())
+            {
+                CheckErrors(await UserManager.PasswordValidator.ValidateAsync(input.User.Password));
+            }
+
+            CheckErrors(await UserManager.UpdateAsync(user));
+
+            //更新角色信息
+            CheckErrors(await UserManager.SetRoles(user, input.AssignedRoleNames));
         }
 
         private async Task FillRoleNames(List<UserListDto> userListDtos)

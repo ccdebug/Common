@@ -51,8 +51,15 @@
                 },
                 "searching": false,
                 "ordering": false,
-                "scrollX": true, // X轴滚动条，取消自适应
+                "scrollX": true, // X轴滚动条
                 "columns": [
+                    {
+                        "data": 'opt',
+                        "visible": true,
+                        render: function(data, type, row, meta) {
+                            return '<div class="btn-group dropdown"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span>  <span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu" role="menu"><li><a href="#">修改</a></li><li><a href="#">权限</a><li><a href="#">解锁</a></li><li><a href="#">删除</a></li></ul></div>';
+                        }
+                    },
                     { "data": 'username', "visible": true },
                     {
                         "data": 'roles',

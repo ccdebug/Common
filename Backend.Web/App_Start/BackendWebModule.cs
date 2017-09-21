@@ -9,6 +9,7 @@ using Abp.Web.Mvc;
 using Abp.Zero.Configuration;
 using Backend.Application;
 using Backend.Entityframwork;
+using Backend.WebApi;
 using Castle.MicroKernel.Registration;
 using Microsoft.Owin.Security;
 
@@ -17,6 +18,7 @@ namespace Backend.Web
     [DependsOn(
         typeof(BackendDataModule),
         typeof(BackendApplicationModule),
+        typeof(BackendWebApiModule),
         typeof(AbpWebMvcModule))]
     public class BackendWebModule : AbpModule
     {
@@ -39,9 +41,13 @@ namespace Backend.Web
                     .UsingFactoryMethod(() => HttpContext.Current.GetOwinContext().Authentication)
                     .LifestyleTransient()
             );
-
+            //Areas
             AreaRegistration.RegisterAllAreas();
+
+            //Routes
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            //Bundling
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }

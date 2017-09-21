@@ -1,12 +1,10 @@
-﻿using Abp.Application.Services.Dto;
-using Abp.Runtime.Validation;
+﻿using Abp.Runtime.Validation;
+using Backend.Application.Dto;
 
 namespace Backend.Application.Authorization.Users.Dto
 {
-    public class GetUsersInput : PagedAndSortedResultRequestDto, IShouldNormalize
+    public class GetUsersInput : PagedSortedAndFilterdInputDto, IShouldNormalize
     {
-        public string Filter { get; set; }
-
         public int? Role { get; set; }
 
         public void Normalize()

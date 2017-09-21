@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Abp.Application.Services.Dto;
 using Abp.UI;
+using Abp.Web.Models;
 using Abp.Web.Mvc.Authorization;
 using Abp.Web.Mvc.Controllers.Results;
 using Backend.Application.Authorization.Users;
@@ -62,6 +63,13 @@ namespace Backend.Web.Controllers
             var output = await _userAppService.GetUserForEdit(new NullableIdDto<long>(id));
             var viewModel = new CreateOrEditUserModalViewModel(output);
             return PartialView("_CreateOrEditModal", viewModel);
+        }
+
+        [HttpPost]
+        [WrapResult]
+        public async Task CreateOrUpdateUser(CreateOrUpdateUserInput input)
+        {
+            await _userAppService.CreateOrUpdateUser(input);
         }
     }
 }

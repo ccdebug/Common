@@ -11,7 +11,8 @@
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#UserInformationTab" data-toggle="tab">用户信息</a></li>
-            <li><a href="#RolesTab" data-toggle="tab">角色</a></li>
+            
+            <li><a href="#RolesTab" data-toggle="tab">角色 <span id="assigned-role-count" class="badge bg-aqua"></span></a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="UserInformationTab">
@@ -43,7 +44,7 @@
                             <label for="PhoneNumber">联系手机</label>
                             <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" value="@Model.User.PhoneNumber">
                         </div>
-                        <div class="form-group">
+                        @*<div class="form-group">
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="SetRandomPassword" value="true" @Html.Raw(Model.IsEditMode ? "" : "checked=\"checked\"")> 使用随机密码
@@ -63,7 +64,7 @@
                                     <input type="checkbox" name="SendActivationEmail" value="true" @Html.Raw(Model.IsEditMode ? "" : "checked=\"checked\"")> 发送激活邮件
                                 </label>
                             </div>
-                        </div>
+                        </div>*@
                         <div class="form-group">
                             <div class="checkbox">
                                 <label>
@@ -89,7 +90,7 @@
                 {
                     <div class="checkbox">
                         <label for="@(role.RoleName)">
-                            <input id="@(role.RoleName)" class="minimal" name="@(role.RoleName)" type="checkbox" value="true" @Html.Raw(role.IsAssigned ? "checked=\"checked\"" : "")> @role.RoleDisplayName
+                            <input id="@(role.RoleName)" class="minimal" name="@(role.RoleName)" type="checkbox" value="true" @Html.Raw(role.IsAssigned ? "checked=\"checked\"" : "")>@role.RoleDisplayName
                         </label>
                     </div>
                 }

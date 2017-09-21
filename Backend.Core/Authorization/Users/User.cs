@@ -9,9 +9,25 @@ namespace Backend.Core.Authorization.Users
     {
         public const string DefaultPassword = "123qwe";
 
-        public string CreateRandomPassword()
+        public const int MinPlainPasswordLength = 6;
+
+        public const int MaxPhoneNumberLength = 24;
+
+        public virtual bool ShouldChangePasswordOnNextLogin { get; set; }
+
+        public static string CreateRandomPassword()
         {
             return Guid.NewGuid().ToString("N").Truncate(16);
+        }
+
+        public static string CreateDefaultPassword()
+        {
+            return DefaultPassword;
+        }
+
+        public User()
+        {
+            IsLockoutEnabled = true;
         }
 
         public static User CreateTenantAdminUser(int tenantId, string emailAddress, string password)
