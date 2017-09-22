@@ -1,7 +1,5 @@
 ﻿(function () {
 
-
-
     $(function () {
 
         var tolenHeaderName = abp.security.antiForgery.tokenHeaderName;
