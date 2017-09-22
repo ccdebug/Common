@@ -49,24 +49,15 @@ namespace Backend.Core.Authorization.Users
 
         public override Task SetGrantedPermissionsAsync(User user, IEnumerable<Permission> permissions)
         {
-            var adminRequiredPermisssions = new List<string>()
-            {
-                AppPermissions.Pages,
-                AppPermissions.Pages_Administration,
-                AppPermissions.Pages_Administration_Users,
-                AppPermissions.Pages_Administration_Users_Create,
-                AppPermissions.Pages_Administration_Users_ChangePermissions,
-                AppPermissions.Pages_Administration_Users_Edit,
-                AppPermissions.Pages_Administration_Users_Delete,
-                AppPermissions.Pages_Administration_Users_Impersonation
-            };
-            if (user.UserName == User.AdminUserName && (!permissions.Any() ||
-                adminRequiredPermisssions.Intersect(permissions.Select(p => p.Name)).Count() 
-                != adminRequiredPermisssions.Count))
+            var permissionArr = permissions as Permission[] ?? permissions.ToArray();
+            if (user.UserName == User.AdminUserName && (!permissionArr.Any() ||
+                                                        AppPermissions.AdminRequiredPermissions
+                                                            .Intersect(permissionArr.Select(p => p.Name)).Count()
+                                                        != AppPermissions.AdminRequiredPermissions.Count()))
             {
                 throw new UserFriendlyException("不能删除Admin用户的[用户/角色]权限");
             }
-            return base.SetGrantedPermissionsAsync(user, permissions);
+            return base.SetGrantedPermissionsAsync(user, permissionArr);
         }
     }
 }
