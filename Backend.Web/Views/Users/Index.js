@@ -7,6 +7,8 @@
         var tolenHeaderName = abp.security.antiForgery.tokenHeaderName;
         var token = abp.security.antiForgery.getToken();
 
+        var _userService = abp.services.app.user;
+
         var _permissions = {
             create: abp.auth.hasPermission("Pages.Administration.Users.Create"),
             edit: abp.auth.hasPermission('Pages.Administration.Users.Edit'),
@@ -22,7 +24,7 @@
         $.fn.dataTable.ext.errMode = 'none';
 
         // init date tables
-        var confTable = $("#UserTable")
+        var userTable = $("#UserTable")
             .on("processing.dt", function (e, setttings, processing) {
                 if (processing) {
                     abp.ui.setBusy('#UserTable');
@@ -32,6 +34,20 @@
             })
             .on("error.dt", function (e, settings, techNote, message) {
                 abp.message.error('加载数据出错!', '系统提示');
+            })
+            .on("draw.dt", function() {
+                $("#UserTable :button.edit").on("click",
+                    function () {
+                        var data = userTable.api().data();
+                        var index = $(this).attr('data-index');
+                        _createOrEditModal.open({ id: data[index].id });
+                    });
+                $("#UserTable :button.delete").on("click",
+                    function () {
+                        var data = userTable.api().data();
+                        var index = $(this).attr('data-index');
+                        deleteUser(data[index]);
+                    });
             })
             .dataTable({
                 "deferRender": true,
@@ -53,13 +69,6 @@
                 "ordering": false,
                 "scrollX": true, // X轴滚动条
                 "columns": [
-                    {
-                        "data": 'opt',
-                        "visible": true,
-                        render: function(data, type, row, meta) {
-                            return '<div class="btn-group dropdown"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span>  <span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu" role="menu"><li><a href="#">修改</a></li><li><a href="#">权限</a><li><a href="#">解锁</a></li><li><a href="#">删除</a></li></ul></div>';
-                        }
-                    },
                     { "data": 'username', "visible": true },
                     {
                         "data": 'roles',
@@ -70,7 +79,7 @@
                                 if (roleNames.length) {
                                     roleNames = roleNames + ",";
                                 }
-                                roleNames = roleNames + data[i].roleName
+                                roleNames = roleNames + data[i].roleName;
                             }
                             return roleNames;
                         }
@@ -108,6 +117,16 @@
                         render: function (data, type, row, meta) {
                             return format(data);
                         }
+                    },
+                    {
+                        "data": 'opt',
+                        "visible": true,
+                        render: function (data, type, row, meta) {
+                            return '<button type="button" data-index=' + meta.row +' class="btn btn-xs btn-flat edit">修改</button>' +
+                                '<button type="button" data-index=' + meta.row +' class="btn btn-xs btn-flat editprivilege">权限</button>' +
+                                '<button type="button" data-index=' + meta.row +' class="btn btn-xs btn-flat">锁定</button>' +
+                                '<button type="button" data-index=' + meta.row +' class="btn btn-xs btn-flat delete">删除</button>';
+                        }
                     }
                 ],
                 "language": {
@@ -138,17 +157,40 @@
 
         $("#SearchButton, #AndvanceSearchButton").on("click", function (e) {
             e.preventDefault();
-            confTable.api().draw();
+            userTable.api().draw();
         });
 
-        $('#CreateNewUserButton').click(function (e) {
+        $('#CreateNewUserButton').on("click", function (e) {
             e.preventDefault();
             _createOrEditModal.open();
         });
 
+        abp.event.on('app.createOrEditUserModalSaved', function () {
+            userTable.api().draw();
+        });
+
+        function deleteUser(user) {
+            if (user.username == app.consts.userManagement.defaultAdminUserName) {
+                abp.message.warn(abp.utils.formatString("{0}用户不能被删除", app.consts.userManagement.defaultAdminUserName));
+                return;
+            }
+
+            abp.message.confirm(abp.utils.formatString("确定要删除{0}吗?", user.username), function (isConfirmed) {
+                if (isConfirmed) {
+                    _userService.deleteUser({
+                            id: user.id
+                        })
+                        .then(function() {
+                            userTable.api().draw();
+                            abp.notify.info("删除成功");
+                        });
+                }
+            });
+        }
+
         function format(date) {
             if (date) {
-                return moment().format("L");
+                return moment(date).format("L");
             }
             return '-';
         }

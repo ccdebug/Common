@@ -52,8 +52,6 @@
             var assignedRoleNames = _findAssignedRoleNames();
             var user = _$userInformationForm.serializeFormToObject();
 
-            console.log(assignedRoleNames);
-
             _modalManager.setBusy(true);
             _userService.createOrUpdateUser({
                 user: user,
@@ -63,6 +61,7 @@
             }).done(function () {
                 abp.notify.info('保存成功');
                 _modalManager.close();
+                abp.event.trigger('app.createOrEditUserModalSaved');
             }).always(function () {
                 _modalManager.setBusy(false);
             });

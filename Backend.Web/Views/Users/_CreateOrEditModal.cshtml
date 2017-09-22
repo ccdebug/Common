@@ -12,11 +12,15 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#UserInformationTab" data-toggle="tab">用户信息</a></li>
             
-            <li><a href="#RolesTab" data-toggle="tab">角色 <span id="assigned-role-count" class="badge bg-aqua"></span></a></li>
+            <li><a href="#RolesTab" data-toggle="tab">角色 <span id="assigned-role-count" class="badge bg-aqua">@Model.AssignedRoleCount</span></a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="UserInformationTab">
                 <form role="form" name="UserInformationsForm" novalidate class="form-validation">
+                    @if (Model.IsEditMode)
+                    {
+                        <input type="hidden" name="Id" value="@Model.User.Id" />
+                    }
                     <div class="box-body">
                         <div class="row">
                             <div class="col-lg-6">
@@ -80,8 +84,8 @@
                                 </label>
                             </div>
                         }
-                        </div>
-                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box-body -->
                 </form>
             </div>
             <!-- /.tab-pane -->

@@ -16,6 +16,8 @@ using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Zero.Configuration;
 using Abp.Configuration;
+using Abp.Runtime.Session;
+using Abp.UI;
 using Backend.Core.Authorization;
 using Backend.Core.Authorization.Roles;
 using Microsoft.AspNet.Identity;
@@ -122,6 +124,16 @@ namespace Backend.Application.Authorization.Users
                 //update
                 await UpdateUserAsync(input);
             }
+        }
+
+        public async Task DeleteUser(EntityDto<long> input)
+        {
+            if (input.Id == AbpSession.GetUserId())
+            {
+                throw new UserFriendlyException("不能删除当前帐号");
+            }
+            var user = await UserManager.GetUserByIdAsync(input.Id);
+            CheckErrors(await UserManager.DeleteAsync(user));
         }
 
         protected virtual async Task CreateUserAsync(CreateOrUpdateUserInput input)

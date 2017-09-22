@@ -12,5 +12,7 @@ namespace Backend.Application.Authorization.Users
         Task<GetUserForEditOutput> GetUserForEdit(NullableIdDto<long> input);
 
         Task CreateOrUpdateUser(CreateOrUpdateUserInput input);
+
+        Task DeleteUser(EntityDto<long> input);
     }
 }

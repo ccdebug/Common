@@ -233,6 +233,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Scripts\consts.js" />
     <Content Include="Common\Scripts\jquery-custom.js" />
     <Content Include="Common\Scripts\jquery-validation-custom.js" />
     <Content Include="Common\Scripts\ModalManager.js" />
