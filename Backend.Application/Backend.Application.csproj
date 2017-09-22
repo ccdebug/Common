@@ -106,9 +106,13 @@
   <ItemGroup>
     <Compile Include="AppConsts.cs" />
     <Compile Include="Authorization\AbpLoginResultTypeHelper.cs" />
+    <Compile Include="Authorization\Permissions\Dto\FlatPermissionDto.cs" />
+    <Compile Include="Authorization\Permissions\PermissionManagerExtensions.cs" />
     <Compile Include="Authorization\Users\Dto\CreateOrUpdateUserInput.cs" />
     <Compile Include="Authorization\Users\Dto\GetUserForEditOutput.cs" />
+    <Compile Include="Authorization\Users\Dto\GetUserPermissionsForEditOutput.cs" />
     <Compile Include="Authorization\Users\Dto\GetUsersInput.cs" />
+    <Compile Include="Authorization\Users\Dto\UpdateUserPermissionsInput.cs" />
     <Compile Include="Authorization\Users\Dto\UserEditDto.cs" />
     <Compile Include="Authorization\Users\Dto\UserListDto.cs" />
     <Compile Include="Authorization\Users\Dto\UserRoleDto.cs" />

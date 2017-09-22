@@ -234,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Scripts\consts.js" />
+    <Content Include="Common\Scripts\helpers.js" />
     <Content Include="Common\Scripts\jquery-custom.js" />
     <Content Include="Common\Scripts\jquery-validation-custom.js" />
     <Content Include="Common\Scripts\ModalManager.js" />
@@ -1067,6 +1068,19 @@
     <Content Include="lib\json2\json2.js" />
     <Content Include="lib\json2\json_parse.js" />
     <Content Include="lib\json2\json_parse_state.js" />
+    <Content Include="lib\jstree\jstree.js" />
+    <Content Include="lib\jstree\jstree.min.js" />
+    <Content Include="lib\jstree\themes\default-dark\32px.png" />
+    <Content Include="lib\jstree\themes\default-dark\40px.png" />
+    <Content Include="lib\jstree\themes\default-dark\style.css" />
+    <Content Include="lib\jstree\themes\default-dark\style.min.css" />
+    <Content Include="lib\jstree\themes\default-dark\throbber.gif" />
+    <Content Include="lib\jstree\themes\default\32px.png" />
+    <Content Include="lib\jstree\themes\default\32px_line.png" />
+    <Content Include="lib\jstree\themes\default\32px_original.png" />
+    <Content Include="lib\jstree\themes\default\40px.png" />
+    <Content Include="lib\jstree\themes\default\style.css" />
+    <Content Include="lib\jstree\themes\default\throbber.gif" />
     <Content Include="lib\moment\moment-timezone-utils.js" />
     <Content Include="lib\moment\moment-timezone-with-data.js" />
     <Content Include="lib\moment\moment-timezone-with-data.min.js" />
@@ -1127,8 +1141,10 @@
     <Content Include="lib\toastr\toastr.min.css" />
     <Content Include="lib\toastr\toastr.min.js" />
     <Content Include="Views\Account\Login.js" />
+    <Content Include="Views\Common\_PermissionTree.js" />
     <Content Include="Views\Users\Index.js" />
     <Content Include="Views\Users\_CreateOrEditModal.js" />
+    <Content Include="Views\Users\_PermissionsModal.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -1149,6 +1165,7 @@
     </Compile>
     <Compile Include="Models\Account\LoginFormViewModel.cs" />
     <Compile Include="Models\Account\LoginViewModel.cs" />
+    <Compile Include="Models\Common\IPermissionsEditViewModel.cs" />
     <Compile Include="Models\Common\JqDatatableRequest.cs" />
     <Compile Include="Models\Common\JqDatatableResult.cs" />
     <Compile Include="Models\Common\Modals\ModalHeaderViewModel.cs" />
@@ -1156,6 +1173,7 @@
     <Compile Include="Models\Layout\SideBarUserAreaViewModel.cs" />
     <Compile Include="Models\Users\CreateOrEditUserModalViewModel.cs" />
     <Compile Include="Models\Users\GetUserListRequest.cs" />
+    <Compile Include="Models\Users\UserPermissionsEditViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\BackendWebViewPageBase.cs" />
     <Compile Include="Views\UrlChecker.cs" />
@@ -1351,6 +1369,8 @@
     <Content Include="Views\Common\Modals\_ModalFooterWithSaveAndCancel.cshtml" />
     <Content Include="Views\Common\Modals\_ModalHeader.cshtml" />
     <Content Include="Views\Users\_CreateOrEditModal.cshtml" />
+    <Content Include="Views\Users\_PermissionsModal.cshtml" />
+    <Content Include="Views\Common\_PermissionTree.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

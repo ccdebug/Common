@@ -13,6 +13,7 @@ using Abp.Web.Mvc.Controllers.Results;
 using Backend.Application.Authorization.Users;
 using Backend.Application.Authorization.Users.Dto;
 using Backend.Core.Authorization;
+using Backend.Core.Authorization.Users;
 using Backend.Web.Models.Common;
 using Backend.Web.Models.Users;
 using Newtonsoft.Json;
@@ -22,10 +23,13 @@ namespace Backend.Web.Controllers
     public class UsersController : Controller
     {
         private readonly IUserAppService _userAppService;
+        private readonly UserManager _userManager;
 
-        public UsersController(IUserAppService userAppService)
+        public UsersController(IUserAppService userAppService,
+            UserManager userManager)
         {
             _userAppService = userAppService;
+            _userManager = userManager;
         }
 
 
@@ -63,6 +67,17 @@ namespace Backend.Web.Controllers
             var output = await _userAppService.GetUserForEdit(new NullableIdDto<long>(id));
             var viewModel = new CreateOrEditUserModalViewModel(output);
             return PartialView("_CreateOrEditModal", viewModel);
+        }
+
+        [AbpMvcAuthorize(AppPermissions.Pages_Administration_Users_ChangePermissions)]
+        public async Task<PartialViewResult> PermissionsModal(long id)
+        {
+            var user = await _userManager.GetUserByIdAsync(id);
+            var output = await _userAppService.GetUserPermissionsForEdit(new EntityDto<long>(id));
+
+            var viewModel = new UserPermissionsEditViewModel(output, user);
+
+            return PartialView("_PermissionsModal", viewModel);
         }
 
         [HttpPost]

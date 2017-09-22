@@ -12,15 +12,18 @@ using Backend.Application.Authorization.Users.Dto;
 using Backend.Core.Authorization.Users;
 using Abp.Linq.Extensions;
 using System.Linq;
+using Abp;
 using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Zero.Configuration;
 using Abp.Configuration;
 using Abp.Runtime.Session;
 using Abp.UI;
+using Backend.Application.Authorization.Permissions.Dto;
 using Backend.Core.Authorization;
 using Backend.Core.Authorization.Roles;
 using Microsoft.AspNet.Identity;
+using Backend.Application.Authorization.Permissions;
 
 namespace Backend.Application.Authorization.Users
 {
@@ -112,6 +115,11 @@ namespace Backend.Application.Authorization.Users
             return output;
         }
 
+        /// <summary>
+        /// 创建、编辑用户
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task CreateOrUpdateUser(CreateOrUpdateUserInput input)
         {
             if (!input.User.Id.HasValue)
@@ -126,6 +134,11 @@ namespace Backend.Application.Authorization.Users
             }
         }
 
+        /// <summary>
+        /// 删除用户
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task DeleteUser(EntityDto<long> input)
         {
             if (input.Id == AbpSession.GetUserId())
@@ -134,6 +147,60 @@ namespace Backend.Application.Authorization.Users
             }
             var user = await UserManager.GetUserByIdAsync(input.Id);
             CheckErrors(await UserManager.DeleteAsync(user));
+        }
+
+        /// <summary>
+        /// 解锁用户
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task UnlockUser(EntityDto<long> input)
+        {
+            var user = await UserManager.GetUserByIdAsync(input.Id);
+            user.Unlock();
+        }
+
+        /// <summary>
+        /// 获取用户权限信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<GetUserPermissionsForEditOutput> GetUserPermissionsForEdit(EntityDto<long> input)
+        {
+            var user = await UserManager.GetUserByIdAsync(input.Id);
+            var permissions = PermissionManager.GetAllPermissions();
+            var grantedPermissions = await UserManager.GetGrantedPermissionsAsync(user);
+
+            return new GetUserPermissionsForEditOutput
+            {
+                Permissions = permissions.MapTo<List<FlatPermissionDto>>().OrderBy(p => p.DisplayName).ToList(),
+                GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList()
+            };
+        }
+
+        /// <summary>
+        /// 更新用户权限信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAuthorize(AppPermissions.Pages_Administration_Users_ChangePermissions)]
+        public async Task UpdateUserPermissions(UpdateUserPermissionsInput input)
+        {
+            var user = await UserManager.GetUserByIdAsync(input.Id);
+            var permissions = PermissionManager.GetPermissionsFromNamesByValidating(input.GrantedPermissionNames);
+            await UserManager.SetGrantedPermissionsAsync(user, permissions);
+        }
+
+        /// <summary>
+        /// 重置用户权限
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAuthorize(AppPermissions.Pages_Administration_Users_ChangePermissions)]
+        public async Task ResetUserSpecificPermissions(EntityDto<long> input)
+        {
+            var user = await UserManager.GetUserByIdAsync(input.Id);
+            await UserManager.ResetAllPermissionsAsync(user);
         }
 
         protected virtual async Task CreateUserAsync(CreateOrUpdateUserInput input)

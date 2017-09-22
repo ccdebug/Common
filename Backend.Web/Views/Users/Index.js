@@ -19,6 +19,12 @@
             modalClass: 'CreateOrEditUserModal'
         });
 
+        var _userPermissionsModal = new app.ModalManager({
+            viewUrl: abp.appPath + 'Users/PermissionsModal',
+            scriptUrl: abp.appPath + 'Views/Users/_PermissionsModal.js',
+            modalClass: 'UserPermissionsModal'
+        });
+
         $.fn.dataTable.ext.errMode = 'none';
 
         // init date tables
@@ -40,11 +46,23 @@
                         var index = $(this).attr('data-index');
                         _createOrEditModal.open({ id: data[index].id });
                     });
+                $("#UserTable :button.permisstions").on("click",
+                    function () {
+                        var data = userTable.api().data();
+                        var index = $(this).attr('data-index');
+                        _userPermissionsModal.open({ id: data[index].id });
+                    });
                 $("#UserTable :button.delete").on("click",
                     function () {
                         var data = userTable.api().data();
                         var index = $(this).attr('data-index');
                         deleteUser(data[index]);
+                    });
+                $("#UserTable :button.unlock").on("click",
+                    function () {
+                        var data = userTable.api().data();
+                        var index = $(this).attr('data-index');
+                        unlockUser(data[index]);
                     });
             })
             .dataTable({
@@ -119,11 +137,25 @@
                     {
                         "data": 'opt',
                         "visible": true,
-                        render: function (data, type, row, meta) {
-                            return '<button type="button" data-index=' + meta.row +' class="btn btn-xs btn-flat edit">修改</button>' +
-                                '<button type="button" data-index=' + meta.row +' class="btn btn-xs btn-flat editprivilege">权限</button>' +
-                                '<button type="button" data-index=' + meta.row +' class="btn btn-xs btn-flat">锁定</button>' +
-                                '<button type="button" data-index=' + meta.row +' class="btn btn-xs btn-flat delete">删除</button>';
+                        render: function(data, type, row, meta) {
+                            var opt = [];
+                            if (_permissions.edit) {
+                                opt.push('<button type="button" data-index=' +
+                                    meta.row +
+                                    ' class="btn btn-xs btn-flat edit">修改</button>');
+                                opt.push('<button type="button" data-index=' +
+                                    meta.row +
+                                    ' class="btn btn-xs btn-flat permisstions">权限</button>');
+                                opt.push('<button type="button" data-index=' +
+                                    meta.row +
+                                    ' class="btn btn-xs btn-flat unlock">解锁</button>');
+                            }
+                            if (_permissions.delete) {
+                                opt.push('<button type="button" data-index=' +
+                                    meta.row +
+                                    ' class="btn btn-xs btn-flat delete">删除</button>');
+                            }
+                            return opt.join('');
                         }
                     }
                 ],
@@ -183,6 +215,14 @@
                             abp.notify.info("删除成功");
                         });
                 }
+            });
+        }
+
+        function unlockUser(user) {
+            _userService.unlockUser({
+                id: user.id
+            }).done(function() {
+                abp.notify.info("解锁成功");
             });
         }
 

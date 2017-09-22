@@ -14,5 +14,13 @@ namespace Backend.Application.Authorization.Users
         Task CreateOrUpdateUser(CreateOrUpdateUserInput input);
 
         Task DeleteUser(EntityDto<long> input);
+
+        Task UnlockUser(EntityDto<long> input);
+
+        Task<GetUserPermissionsForEditOutput> GetUserPermissionsForEdit(EntityDto<long> input);
+
+        Task UpdateUserPermissions(UpdateUserPermissionsInput input);
+
+        Task ResetUserSpecificPermissions(EntityDto<long> input);
     }
 }

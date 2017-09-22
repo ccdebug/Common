@@ -44,5 +44,11 @@ namespace Backend.Core.Authorization.Users
 
             return user;
         }
+
+        public void Unlock()
+        {
+            AccessFailedCount = 0;
+            LockoutEndDateUtc = null;
+        }
     }
 }

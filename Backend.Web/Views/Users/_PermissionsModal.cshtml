@@ -1,0 +1,17 @@
+﻿@using Backend.Web.Models.Common.Modals
+@model Backend.Web.Models.Users.UserPermissionsEditViewModel
+    
+@Html.Partial("~/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("权限" + "-" + Model.User.UserName))
+
+<div class="modal-body">
+    @Html.Partial("~/Views/Common/_PermissionTree.cshtml", Model)
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default pull-left reset-permissions-button" data-toggle="tooltip" title="@L("ResetPermissionsTooltip")" data-placement="top"><span>重置权限</span></button>
+    <button type="button" class="btn btn-default close-button" data-dismiss="modal">取消</button>
+    <button type="button" class="btn btn-primary save-button">保存</button>
+</div>
+
+
+

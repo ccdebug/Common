@@ -18,6 +18,7 @@ namespace Backend.Web
                         "~/lib/spin.js/spin.min.js",
                         "~/lib/spin.js/jquery.spin.js",
                         "~/lib/toastr/toastr.min.js",
+                        "~/lib/jstree/jstree.min.js",
                         "~/lib/moment/moment-with-locales.min.js",
                         "~/lib/abp-web-resources/Abp/Framework/scripts/abp.js",
                         "~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
@@ -33,11 +34,6 @@ namespace Backend.Web
             );
 
             bundles.Add(
-                new ScriptBundle("~/Bundles/Common/js")
-                    .IncludeDirectory("~/Common/Scripts", "*.js", true)
-            );
-
-            bundles.Add(
                 new StyleBundle("~/Bundles/vendor/css")
                     .Include("~/Content/adminlte/bootstrap/css/bootstrap.min.css", new CssRewriteUrlTransform())
                     .Include("~/Content/adminlte/plugins/font-awesome/font-awesome.min.css", new CssRewriteUrlTransform())
@@ -45,10 +41,16 @@ namespace Backend.Web
                     .Include("~/Content/adminlte/plugins/iCheck/square/blue.css", new CssRewriteUrlTransform())
                     .Include("~/Content/adminlte/dist/css/AdminLTE.min.css", new CssRewriteUrlTransform())
                     .Include("~/Content/adminlte/dist/css/skins/skin-blue.min.css", new CssRewriteUrlTransform())
+                    .Include("~/Content/adminlte/plugins/iCheck/all.css", new CssRewriteUrlTransform())
                     .Include("~/lib/sweetalert/dist/sweetalert.css", new CssRewriteUrlTransform())
                     .Include("~/lib/toastr/toastr.min.css", new CssRewriteUrlTransform())
-                    .Include("~/Content/adminlte/plugins/iCheck/all.css", new CssRewriteUrlTransform())
+                    .Include("~/lib/jstree/themes/default/style.css", new CssRewriteUrlTransform())
                 );
+
+            bundles.Add(
+                new ScriptBundle("~/Bundles/Common/js")
+                    .IncludeDirectory("~/Common/Scripts", "*.js", true)
+            );
         }
     }
 }

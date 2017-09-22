@@ -62,6 +62,16 @@
 
     <text name="Administration" value="系统管理" />
     <text name="Roles" value="角色" />
+    <text name="ResetPermissionsTooltip" value="重置权限后,用户仅拥有所属角色的权限,为用户直接指定的权限将取消" />
+    <text name="Pages" value="页面" />
+    <text name="ChangingPermissions" value="更改权限" />
+    <text name="CreatingNewUser" value="添加用户" />
+    <text name="DeletingUser" value="删除用户" />
+    <text name="EditingUser" value="修改用户" />
+    <text name="LoginForUsers" value="用户登录" />
     
+    
+    <text name="ResetSuccessfully" value="重置权限成功" />
+
   </texts>
 </localizationDictionary>
